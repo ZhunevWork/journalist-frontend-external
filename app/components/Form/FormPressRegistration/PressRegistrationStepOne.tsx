@@ -77,33 +77,31 @@ export default function PressRegistrationStepOne({
         />
 
         <Input
-          value={values.lastName}
-          label={stepOneLabels.lastName}
-          {...register('lastName', { required: 'Обязательное поле' })}
-          error={!!errors.lastName}
+          value={values.last_name}
+          label={stepOneLabels.last_name}
+          {...register('last_name', { required: 'Обязательное поле' })}
+          error={!!errors.last_name}
         />
 
         <Input
-          value={values.firstName}
-          label={stepOneLabels.firstName}
-          {...register('firstName', { required: 'Обязательное поле' })}
-          error={!!errors.firstName}
+          value={values.name}
+          label={stepOneLabels.name}
+          {...register('name', { required: 'Обязательное поле' })}
+          error={!!errors.name}
         />
 
         <Input
-          value={values.middleName}
-          label={stepOneLabels.middleName}
-          {...register('middleName', { required: 'Обязательное поле' })}
-          error={!!errors.middleName}
+          value={values.middle_name}
+          label={stepOneLabels.middle_name}
+          {...register('middle_name')}
         />
 
         <Controller
           control={control}
-          name="birthDate"
-          rules={{ required: 'Обязательное поле' }}
+          name="birthday"
           render={({ field, fieldState }) => (
             <DatePicker
-              label={stepOneLabels.birthDate}
+              label={stepOneLabels.birthday}
               selected={field.value ? new Date(field.value) : undefined}
               onChange={date => field.onChange(date ? date.toISOString() : '')}
               error={!!fieldState.error}
@@ -113,28 +111,27 @@ export default function PressRegistrationStepOne({
 
         <div className="col-span-2 flex gap-4">
           <Input
-            value={values.passportSeries}
-            label={stepOneLabels.passportSeries}
-            {...register('passportSeries', { required: 'Обязательное поле' })}
-            error={!!errors.passportNumber}
+            value={values.passport_series}
+            label={stepOneLabels.passport_series}
+            {...register('passport_series')}
+            error={!!errors.passport_series}
             classNames="max-w-[165px]"
           />
 
           <Input
-            value={values.passportNumber}
-            label={stepOneLabels.passportNumber}
-            {...register('passportNumber', { required: 'Обязательное поле' })}
-            error={!!errors.passportNumber}
+            value={values.passport_number}
+            label={stepOneLabels.passport_number}
+            {...register('passport_number')}
+            error={!!errors.passport_number}
             classNames="max-w-[165px]"
           />
 
           <Controller
             control={control}
-            name="passportIssueDate"
-            rules={{ required: 'Обязательное поле' }}
+            name="issue_date"
             render={({ field, fieldState }) => (
               <DatePicker
-                label={stepOneLabels.passportIssueDate}
+                label={stepOneLabels.issue_date}
                 selected={field.value ? new Date(field.value) : undefined}
                 onChange={date =>
                   field.onChange(date ? date.toISOString() : '')
@@ -147,29 +144,25 @@ export default function PressRegistrationStepOne({
         </div>
 
         <Input
-          value={values.passportIssuedBy}
-          label={stepOneLabels.passportIssuedBy}
-          {...register('passportIssuedBy', {
-            required: 'Обязательное поле',
-          })}
-          error={!!errors.passportIssuedBy}
+          value={values.who_issues}
+          label={stepOneLabels.who_issues}
+          {...register('who_issues')}
+          error={!!errors.who_issues}
         />
 
         <Input
-          value={values.passportDivisionCode}
-          label={stepOneLabels.passportDivisionCode}
-          {...register('passportDivisionCode', {
-            required: 'Обязательное поле',
-          })}
-          error={!!errors.passportDivisionCode}
+          value={values.department_code}
+          label={stepOneLabels.department_code}
+          {...register('department_code')}
+          error={!!errors.department_code}
         />
 
         <Input
           classNames="col-span-2"
-          value={values.birthPlace}
-          label={stepOneLabels.birthPlace}
-          {...register('birthPlace', { required: 'Обязательное поле' })}
-          error={!!errors.birthPlace}
+          value={values.birth_place}
+          label={stepOneLabels.birth_place}
+          {...register('birth_place')}
+          error={!!errors.birth_place}
         />
       </div>
     </div>

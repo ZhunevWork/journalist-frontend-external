@@ -3,13 +3,25 @@ import Header from '~/components/Header';
 import Menu from '~/components/Menu';
 import Container from '~/components/ui/Container';
 import { useResponsive } from '~/hooks/useResponsive';
-import clsx from 'clsx';
-import { Outlet, useLocation } from 'react-router';
+import { RouterPaths } from '~/routes';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 
 export default function AppLayout() {
+  const userToken = useSelector((state: any) => state.auth.userToken);
+  const navigate = useNavigate();
   const location = useLocation();
   const { isMd } = useResponsive();
-  const isAuthPage = location.pathname === '/auth';
+  const isAuthPage = location.pathname === RouterPaths.AUTH;
+
+  useEffect(() => {
+    if (!userToken && !isAuthPage) {
+      navigate(RouterPaths.AUTH);
+    } else if (userToken && isAuthPage) {
+      navigate(RouterPaths.HOME);
+    }
+  }, [userToken, isAuthPage, navigate]);
 
   return (
     <>

@@ -1,7 +1,7 @@
 import FormPressAuth from '~/components/Form/FormPressAuth';
 import FormPressRegistration from '~/components/Form/FormPressRegistration';
 import Container from '~/components/ui/Container';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { Route } from './+types/home';
 

@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { jwtDecode, type JwtPayload } from 'jwt-decode';
 import { toast } from 'sonner';
 
-export const USER_TOKEN_LS = 'userToken';
-export const USER_INFO_LS = 'userInfo';
+export const USER_TOKEN = 'userToken';
+export const USER_INFO = 'userInfo';
 
 interface InitialStateType {
   userInfo: { username: string; role: string };
@@ -12,8 +11,8 @@ interface InitialStateType {
 
 const initialState: InitialStateType = {
   userInfo: { username: '', role: '' },
-  userToken: '',
-  // localStorage.getItem(USER_TOKEN_LS),
+  userToken:
+    typeof window !== 'undefined' ? localStorage.getItem(USER_TOKEN) : null,
 };
 
 const authSlice = createSlice({
@@ -21,7 +20,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUserLogout: state => {
-      // localStorage.removeItem(USER_TOKEN_LS);
+      localStorage.removeItem(USER_TOKEN);
 
       state.userInfo = { username: '', role: '' };
       state.userToken = null;
@@ -29,9 +28,10 @@ const authSlice = createSlice({
     setUserToken: (state, action) => {
       try {
         state.userToken = action.payload;
+        localStorage.setItem(USER_TOKEN, action.payload);
       } catch (e) {
         console.error(e);
-        toast.error('Передан невалидный токен!', { duration: 10000 });
+        toast.error('Передан невалидный токен!', { duration: 1000 });
       }
     },
   },

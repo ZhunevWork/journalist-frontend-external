@@ -1,5 +1,6 @@
 import CalendarEvents from '~/components/CalendarEvents';
 import ListAccreditations from '~/components/List/ListAccreditations';
+import { useEffect } from 'react';
 import { Link } from 'react-router';
 
 import type { Route } from './+types/home';
@@ -9,6 +10,12 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+  useEffect(() => {
+    return () => {
+      sessionStorage.clear();
+    };
+  }, []);
+
   return (
     <div className="flex flex-col w-full">
       <h1 className="font-(family-name:--font-halvar) text-4xl mb-8">

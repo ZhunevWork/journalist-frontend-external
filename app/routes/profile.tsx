@@ -1,13 +1,22 @@
-import type { Route } from '.react-router/types/app/routes/+types/profile';
 import CardProfileData from '~/components/Card/CardProfileData';
 import CardProfileFiles from '~/components/Card/CardProfileFlies';
 import Button from '~/components/ui/Button';
+import { useAppDispatch } from '~/hooks/redux';
+import { setUserLogout } from '~/store/authSlice';
+
+import type { Route } from '.react-router/types/app/routes/+types/profile';
 
 export function meta({}: Route.MetaArgs) {
-	return [{ title: 'Профиль' }];
+  return [{ title: 'Профиль' }];
 }
 
 export default function Profile() {
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(setUserLogout());
+  };
+
   return (
     <div className="w-full">
       <h1 className="font-(family-name:--font-halvar) text-4xl mb-8">
@@ -32,7 +41,7 @@ export default function Profile() {
         </div>
       </div>
 
-      <Button styleType="primary" classNames="w-80">
+      <Button styleType="primary" classNames="w-80" onClick={handleLogout}>
         Выйти
       </Button>
     </div>

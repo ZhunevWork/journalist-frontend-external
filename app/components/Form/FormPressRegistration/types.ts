@@ -1,23 +1,26 @@
-export interface StepOneFields {
-  phone: string;
-  email: string;
-  lastName: string;
-  firstName: string;
-  middleName: string;
-  birthDate: string;
-  passportSeries: string;
-  passportNumber: string;
-  passportIssueDate: string;
-  passportIssuedBy: string;
-  passportDivisionCode: string;
-  birthPlace: string;
-}
+import type { IRegisterArgs } from '~/api/controllers/auth/types';
 
-export interface StepTwoFields {
-  role?: string;
-  channel?: string;
-  fanCard?: string;
-  type?: string;
-  password?: string;
-  passwordRepeat?: string;
-}
+export type StepOneFields = Pick<
+  IRegisterArgs,
+  | 'phone'
+  | 'email'
+  | 'last_name'
+  | 'name'
+  | 'middle_name'
+  | 'birthday'
+  | 'passport_series'
+  | 'passport_number'
+  | 'who_issues'
+  | 'issue_date'
+  | 'department_code'
+  | 'birth_place'
+>;
+
+export type StepTwoFields = Pick<
+  IRegisterArgs,
+  | 'smi_type'
+  | 'fan_id'
+  | 'accreditation_type'
+  | 'password'
+  | 'password_confirmation'
+>;

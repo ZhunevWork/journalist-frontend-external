@@ -17,7 +17,7 @@ export const authController = commonApi.injectEndpoints({
     }),
     register: builder.mutation<IRegisterResponse, IRegisterArgs>({
       query: body => ({
-        url: '/login',
+        url: '/register',
         method: 'POST',
         body,
       }),
@@ -31,4 +31,5 @@ export const authController = commonApi.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation } = authController;
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation } =
+  authController;

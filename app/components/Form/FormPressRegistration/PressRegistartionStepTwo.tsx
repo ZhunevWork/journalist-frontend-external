@@ -1,11 +1,11 @@
+import { stepTwoDefaultValues } from '~/components/Form/FormPressRegistration/data';
 import type { StepTwoFields } from '~/components/Form/FormPressRegistration/types';
 import Input from '~/components/ui/Input';
 import { Radio } from '~/components/ui/Radio';
+import Upload from '~/components/ui/Upload';
 import { loadFormFromSession, saveFormToSession } from '~/utils/FormSession';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-
-const stepTwoDefaultValues: StepTwoFields = {};
 
 interface PressRegistrationStepTwoProps {
   onValidChange?: (valid: boolean) => void;
@@ -23,6 +23,7 @@ export default function PressRegistrationStepTwo(
     formState: { errors, isValid },
   } = useForm<StepTwoFields>({
     defaultValues: stepTwoDefaultValues,
+    mode: 'onChange',
   });
 
   useEffect(() => {
@@ -46,44 +47,37 @@ export default function PressRegistrationStepTwo(
 
   return (
     <div>
-      <div className="bg-(--bg-secondary) p-2 pt-5 rounded-2xl mb-4 max-w-2xl">
-        <div className="grid grid-cols-2 gap-4 mb-5">
+      <div className="bg-(--bg-secondary) p-5 rounded-2xl mb-4 max-w-2xl">
+        <div className="grid grid-cols-2 gap-4">
           <Radio
             id="smi"
             label="СМИ"
             value="smi"
             defaultChecked
-            {...register('role', { required: 'Обязательное поле' })}
+            {...register('smi_type', { required: 'Обязательное поле' })}
           />
           <Radio
             id="bloger"
             label="Блогер/Фотограф"
             value="bloger"
-            {...register('role', { required: 'Обязательное поле' })}
+            {...register('smi_type', { required: 'Обязательное поле' })}
           />
         </div>
-
-        <Input
-          label="Название издания/канала"
-          {...register('channel', { required: 'Обязательное поле' })}
-          error={!!errors.channel}
-        />
-
-        <span className="mb-1.5 text-(--gray)">
-          Скан удостоверения или письменное подтверждение
-        </span>
       </div>
 
       <span className="text-(--gray) mb-1.5">Личное фото</span>
 
+      <Upload multiple classNames="mb-4" />
+
       <Input
-        label="Карта болельшика"
-        value={values.fanCard}
-        {...register('fanCard', { required: 'Обязательное поле' })}
-        error={!!errors.fanCard}
+        label="Карта болельшика (необязательно)"
+        value={values.fan_id}
+        {...register('fan_id')}
+        error={!!errors.fan_id}
+        classNames="mb-4"
       />
 
-      <span className="text-(--gray) mb-1.5">Тип аккредитации</span>
+      <span className="text-(--gray) mb-1.5 block">Тип аккредитации</span>
 
       <div className="grid grid-cols-2 gap-4 mb-5">
         <Radio
@@ -91,13 +85,13 @@ export default function PressRegistrationStepTwo(
           value="press"
           label="Пресса"
           defaultChecked
-          {...register('type', { required: 'Обязательное поле' })}
+          {...register('accreditation_type', { required: 'Обязательное поле' })}
         />
         <Radio
           id="photo"
           value="photo"
           label="Фото"
-          {...register('type', { required: 'Обязательное поле' })}
+          {...register('accreditation_type', { required: 'Обязательное поле' })}
         />
       </div>
 
@@ -105,14 +99,21 @@ export default function PressRegistrationStepTwo(
         <Input
           type="password"
           label="Пароль"
+          value={values.password}
           {...register('password', { required: 'Обязательное поле' })}
           error={!!errors.password}
         />
+
         <Input
           type="password"
           label="Повторите пароль"
-          {...register('passwordRepeat', { required: 'Обязательное поле' })}
-          error={!!errors.passwordRepeat}
+          value={values.password_confirmation}
+          {...register('password_confirmation', {
+            required: 'Обязательное поле',
+            validate: value =>
+              value === watch('password') || 'Пароли должны совпадать',
+          })}
+          error={!!errors.password_confirmation}
         />
       </div>
     </div>

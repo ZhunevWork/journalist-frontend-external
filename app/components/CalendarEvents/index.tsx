@@ -20,7 +20,7 @@ export default function CalendarEvents() {
     };
   };
 
-  if (!data) return null;
+  if (!data) return <Calendar />;
 
   return (
     <Calendar

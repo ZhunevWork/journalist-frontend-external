@@ -1,7 +1,8 @@
 import { useLoginMutation } from '~/api/controllers/auth';
-import type { ILoginBody } from '~/api/controllers/auth/types';
+import type { ILoginArgs } from '~/api/controllers/auth/types';
 import Button from '~/components/ui/Button';
 import Input from '~/components/ui/Input';
+import { useAppSelector } from '~/hooks/redux';
 import { setUserToken } from '~/store/authSlice';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -13,23 +14,18 @@ interface FormPressAuthProps {
 export default function FormPressAuth({ setIsAuth }: FormPressAuthProps) {
   const dispatch = useDispatch();
   const [login, { isLoading, error }] = useLoginMutation();
+  const token = useAppSelector(state => state.auth.userToken);
+
 
   const {
     register,
     handleSubmit,
     setError,
     clearErrors,
-    watch,
     formState: { errors, isValid },
-  } = useForm<ILoginBody>();
+  } = useForm<ILoginArgs>();
 
-  console.log(isLoading, 'a', !isValid);
-
-  const values = watch();
-
-  console.log(values);
-
-  const onSubmit = async (data: ILoginBody) => {
+  const onSubmit = async (data: ILoginArgs) => {
     clearErrors('root');
     try {
       const res = await login(data).unwrap();

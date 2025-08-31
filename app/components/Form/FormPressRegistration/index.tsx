@@ -1,3 +1,4 @@
+import { useRegisterMutation } from '~/api/controllers/auth';
 import PressRegistrationStepTwo from '~/components/Form/FormPressRegistration/PressRegistartionStepTwo';
 import PressRegistrationStepOne from '~/components/Form/FormPressRegistration/PressRegistrationStepOne';
 import Button from '~/components/ui/Button';
@@ -14,16 +15,29 @@ export default function FormPressRegistration(
   props: FormPressRegistrationProps,
 ) {
   const { setIsAuth } = props;
+  const [register] = useRegisterMutation();
 
   const [step, setStep] = useState(1);
-  const [isStepOneValid, setIsStepOneValid] = useState(false);
+  const [isStepValid, setIsStepValid] = useState(false);
+  const [isAgree, setIsAgree] = useState(false);
 
   const handleClick = () => {
     if (step === 1) {
       setStep(2);
     } else {
-      // Здесь можно обработать отправку формы
-      console.log('Отправка формы');
+      const stepOneData = JSON.parse(
+        sessionStorage.getItem('pressStepOne') || '{}',
+      );
+      const stepTwoData = JSON.parse(
+        sessionStorage.getItem('pressStepTwo') || '{}',
+      );
+      const formData = {
+        ...stepOneData,
+        ...stepTwoData,
+        rules_agreement: true,
+      };
+
+      register(formData);
     }
   };
 
@@ -62,13 +76,15 @@ export default function FormPressRegistration(
       </div>
 
       {step === 1 && (
-        <PressRegistrationStepOne onValidChange={setIsStepOneValid} />
+        <PressRegistrationStepOne onValidChange={setIsStepValid} />
       )}
       {step === 2 && (
-        <PressRegistrationStepTwo onValidChange={setIsStepOneValid} />
+        <PressRegistrationStepTwo onValidChange={setIsStepValid} />
       )}
 
       <Checkbox
+        checked={isAgree}
+        onChange={() => setIsAgree(!isAgree)}
         label={
           <>
             Согласен с{' '}
@@ -83,7 +99,7 @@ export default function FormPressRegistration(
         type="submit"
         classNames="w-full"
         onClick={handleClick}
-        disabled={!isStepOneValid}
+        disabled={!isStepValid || (step === 2 && !isAgree)}
       >
         {step === 1 ? 'Продолжить' : 'Оставить заявку'}
       </Button>
