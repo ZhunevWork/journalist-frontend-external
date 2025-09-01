@@ -5,6 +5,8 @@ export interface ILoginArgs {
 
 export interface ILoginResponse {
   token: string;
+  user: IUserData;
+  profile: IProfileData;
 }
 
 export interface IUserData {
@@ -19,9 +21,19 @@ export interface IUserData {
 }
 
 export interface IProfileData {
-  id: number;
-  profile_photo_url: string;
-  documents_count: number;
+  accreditation_type: 'Пресса' | 'Фото';
+  birth_place: string;
+  birthday: string;
+  department_code: string;
+  fan_id: string | null;
+  issue_date: string;
+  passport_number: string;
+  passport_series: string;
+  rules_agreement: boolean;
+  smi_name: string;
+  smi_type: 'Сми' | 'Блогер/Фотограф';
+  smi_url: string;
+  who_issues: string;
 }
 
 export interface IRegisterArgs {

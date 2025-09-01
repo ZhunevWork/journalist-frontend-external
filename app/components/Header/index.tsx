@@ -50,7 +50,7 @@ export default function Header() {
 
         {/* Кнопки справа */}
         <div className="flex gap-3 md:gap-5">
-          <button
+          {/* <button
             onClick={() => setIsDrawerOpen(true)}
             className="h-10 w-10 md:h-[60px] md:w-[60px] rounded-full border border-(--gray-light) flex items-center justify-center cursor-pointer"
           >
@@ -59,7 +59,7 @@ export default function Header() {
               alt="bell"
               className="w-5 h-5 md:w-6 md:h-6"
             />
-          </button>
+          </button> */}
 
           <Link to={RouterPaths.PROFILE}>
             <div className="h-10 w-10 md:h-[60px] md:w-[60px] rounded-full bg-red-500"></div>

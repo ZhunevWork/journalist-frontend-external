@@ -5,12 +5,13 @@ export interface ModalWrapperProps {
   open: boolean;
   onClose: () => void;
   children?: React.ReactNode;
-  title?: string;
+  title?: string | React.ReactNode;
   classNames?: string;
+  styles?: React.CSSProperties;
 }
 
 export default function ModalWrapper(props: ModalWrapperProps) {
-  const { open, onClose, children, title, classNames } = props;
+  const { open, onClose, children, title, classNames, styles } = props;
 
   // Закрытие по Esc
   useEffect(() => {
@@ -52,6 +53,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
           'overflow-y-auto shadow-lg min-w-[320px] p-8 pb-12 lg:pb-8',
           classNames,
         )}
+        style={styles}
       >
         {title && <h2 className="text-xl font-semibold mb-7">{title}</h2>}
         <button

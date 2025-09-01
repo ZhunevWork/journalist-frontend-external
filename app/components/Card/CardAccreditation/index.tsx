@@ -1,5 +1,5 @@
 import CardWrapper from '~/components/Card/CardWrapper';
-import ModalAccreditationApp from '~/components/Modal/ModalAccreditationApp';
+import ModalAccreditationApp from '~/components/Modal/ModalCellAccreditationApp';
 import { useState } from 'react';
 
 export default function CardAccreditation() {

@@ -2,10 +2,11 @@ import { useLoginMutation } from '~/api/controllers/auth';
 import type { ILoginArgs } from '~/api/controllers/auth/types';
 import Button from '~/components/ui/Button';
 import Input from '~/components/ui/Input';
-import { useAppSelector } from '~/hooks/redux';
-import { setUserToken } from '~/store/authSlice';
+import { RouterPaths } from '~/routes';
+import { setProfileData, setUserData, setUserToken } from '~/store/authSlice';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 interface FormPressAuthProps {
   setIsAuth: () => void;
@@ -13,9 +14,8 @@ interface FormPressAuthProps {
 
 export default function FormPressAuth({ setIsAuth }: FormPressAuthProps) {
   const dispatch = useDispatch();
-  const [login, { isLoading, error }] = useLoginMutation();
-  const token = useAppSelector(state => state.auth.userToken);
-
+  const [login, { isLoading }] = useLoginMutation();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -27,16 +27,28 @@ export default function FormPressAuth({ setIsAuth }: FormPressAuthProps) {
 
   const onSubmit = async (data: ILoginArgs) => {
     clearErrors('root');
-    try {
-      const res = await login(data).unwrap();
-      dispatch(setUserToken(res.token));
-      setIsAuth();
-    } catch {
-      setError('root', {
-        type: 'manual',
-        message: 'Неверный логин или пароль',
+    login(data)
+      .unwrap()
+      .then(res => {
+        if (res?.token) {
+          dispatch(setUserToken(res.token));
+          dispatch(setUserData(res.user));
+          dispatch(setProfileData(res.profile));
+          navigate(RouterPaths.HOME);
+        } else {
+          setError('root', {
+            type: 'manual',
+            message: 'Неверная структура ответа сервера',
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        setError('root', {
+          type: 'manual',
+          message: error?.data?.message || 'Неверный логин или пароль',
+        });
       });
-    }
   };
 
   return (

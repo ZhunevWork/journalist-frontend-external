@@ -1,5 +1,4 @@
 import { useGetNotificationsQuery } from '~/api/controllers/notifications';
-import CardAccreditation from '~/components/Card/CardAccreditation';
 import CardNotification from '~/components/Card/CardNotification';
 
 export default function ListNotifications() {
