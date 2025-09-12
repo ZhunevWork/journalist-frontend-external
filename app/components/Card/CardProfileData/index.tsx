@@ -1,30 +1,57 @@
 import Checkbox from '~/components/ui/Checkbox';
 import Input from '~/components/ui/Input';
 import { Radio } from '~/components/ui/Radio';
+import { useAppSelector } from '~/hooks/redux';
+import dayjs from 'dayjs';
 
 export default function CardProfileData() {
+  const profileData = useAppSelector(state => state.auth.profileData);
+  const userData = useAppSelector(state => state.auth.userData);
+
+  console.log('profileData in card profile', userData);
+
   return (
     <div className="md:p-9 p-4 rounded-3xl border border-(--gray-light) grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-3">
       <div className="flex flex-col gap-2.5">
         <span className="text-(--gray) text-sm">Тип ресурса</span>
 
-        <Radio disabled label="СМИ" />
-        <Radio disabled label="Блогер/Фотограф" defaultChecked />
+        <Radio
+          disabled
+          label="СМИ"
+          defaultChecked={profileData?.smi_type === 'Сми'}
+        />
+        <Radio
+          disabled
+          label="Блогер/Фотограф"
+          defaultChecked={profileData?.smi_type === 'Блогер/Фотограф'}
+        />
       </div>
 
       <div className="flex flex-col gap-2.5">
         <span className="text-(--gray) text-sm">Тип аккредитации</span>
 
-        <Radio disabled label="СМИ" />
-        <Radio disabled label="Блогер/Фотограф" defaultChecked />
+        <Radio
+          disabled
+          label="Пресса"
+          defaultChecked={profileData?.accreditation_type === 'Пресса'}
+        />
+        <Radio
+          disabled
+          label="Фото"
+          defaultChecked={profileData?.accreditation_type === 'Фото'}
+        />
       </div>
 
-      <Input label="Номер телефона" value="+79969198193" disabled />
-      <Input label="Почта" value="+79969198193" disabled />
-      <Input label="Дата рождения" value="+79969198193" disabled />
-      <Input label="Место рождения" value="+79969198193" disabled />
-      <Input label="Название ресурса" value="+79969198193" disabled />
-      <Input label="Ссылка на ресурс" value="+79969198193" disabled />
+      <Input label="Номер телефона" value={userData?.phone} disabled />
+      <Input label="Почта" value={userData?.email} disabled />
+      <Input
+        label="Дата рождения"
+        value={dayjs(profileData?.birthday).format('DD.MM.YYYY')}
+        disabled
+      />
+      <Input label="Место рождения" value={profileData?.birth_place} disabled />
+      <Input label="Название ресурса" value={profileData?.smi_name} disabled />
+      <Input label="Ссылка на ресурс" value={profileData?.smi_url} disabled />
 
       <div className="bg-(--bg-secondary) border border-(--gray-light) rounded-2xl px-6 py-5 md:col-span-2 ">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
@@ -34,7 +61,11 @@ export default function CardProfileData() {
             </span>
 
             <p>
-              42 14 123542 от 21.06.2020 <br /> Выдан ГУ МВД России, 770-015
+              {profileData?.passport_number}&nbsp;
+              {profileData?.passport_series}&nbsp; от&nbsp;
+              {dayjs(profileData?.issue_date).format('DD.MM.YYYY')} <br />{' '}
+              Выдан&nbsp;{profileData?.who_issues},&nbsp;
+              {profileData?.department_code}
             </p>
           </div>
           <div>
@@ -42,7 +73,7 @@ export default function CardProfileData() {
               Карта болельщика
             </span>
 
-            <p>123456789</p>
+            <p>{profileData?.fan_id}</p>
           </div>
         </div>
       </div>

@@ -1,16 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { toast } from 'sonner';
+import type { IProfileData, IUserData } from '~/api/controllers/auth/types';
 
 export const USER_TOKEN = 'userToken';
-export const USER_INFO = 'userInfo';
+export const PROFILE_DATA = 'profileData';
+export const USER_DATA = 'userData';
 
 interface InitialStateType {
-  userInfo: { username: string; role: string };
+  userData: IUserData | null;
+  profileData: IProfileData | null;
   userToken: string | null;
 }
 
 const initialState: InitialStateType = {
-  userInfo: { username: '', role: '' },
+  userData:
+    typeof window !== 'undefined' && localStorage.getItem(PROFILE_DATA)
+      ? JSON.parse(localStorage.getItem(USER_DATA) ?? '')
+      : null,
+  profileData:
+    typeof window !== 'undefined' && localStorage.getItem(PROFILE_DATA)
+      ? JSON.parse(localStorage.getItem(PROFILE_DATA) ?? '')
+      : null,
   userToken:
     typeof window !== 'undefined' ? localStorage.getItem(USER_TOKEN) : null,
 };
@@ -22,21 +31,26 @@ const authSlice = createSlice({
     setUserLogout: state => {
       localStorage.removeItem(USER_TOKEN);
 
-      state.userInfo = { username: '', role: '' };
+      state.profileData = null;
+      state.userData = null;
       state.userToken = null;
     },
     setUserToken: (state, action) => {
-      try {
-        state.userToken = action.payload;
-        localStorage.setItem(USER_TOKEN, action.payload);
-      } catch (e) {
-        console.error(e);
-        toast.error('Передан невалидный токен!', { duration: 1000 });
-      }
+      state.userToken = action.payload;
+      localStorage.setItem(USER_TOKEN, action.payload);
+    },
+    setUserData: (state, action) => {
+      state.userData = action.payload;
+      localStorage.setItem(USER_DATA, JSON.stringify(action.payload));
+    },
+    setProfileData: (state, action) => {
+      state.profileData = action.payload;
+      localStorage.setItem(PROFILE_DATA, JSON.stringify(action.payload));
     },
   },
 });
 
-export const { setUserLogout, setUserToken } = authSlice.actions;
+export const { setUserLogout, setUserToken, setProfileData, setUserData } =
+  authSlice.actions;
 
 export default authSlice.reducer;
