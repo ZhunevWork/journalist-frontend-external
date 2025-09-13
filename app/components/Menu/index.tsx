@@ -21,7 +21,13 @@ export default function Menu() {
   const location = useLocation();
 
   return (
-    <div className="flex md:flex-col items-center md:h-fit md:gap-8 md:justify-start justify-between pb-4 sticky md:bottom-auto bg-white top-0">
+    <div className="flex md:flex-col items-center md:h-fit md:gap-8 md:justify-start justify-between pb-4 md:py-6 sticky md:bottom-auto bg-white top-0">
+      <img
+        src="./icons/logo.svg"
+        alt="logo"
+        className="w-12 h-12 md:w-auto md:h-auto"
+      />
+
       {items.map((item, index) => {
         const isActive = location.pathname === item.link;
 

@@ -19,7 +19,6 @@ export default function Accreditations() {
       <div className="flex flex-wrap justify-between w-full gap-4">
         <ListAccreditations title="На рассмотрении" data={[1]} />
         <ListAccreditations title="Одобренные" data={[1, 2, 3]} />
-        <ListAccreditations title="Отклоненные" data={[...new Array(6)]} />
       </div>
     </div>
   );

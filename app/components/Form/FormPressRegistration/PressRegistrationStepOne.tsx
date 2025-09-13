@@ -55,7 +55,7 @@ export default function PressRegistrationStepOne({
           {...register('phone', {
             required: 'Обязательное поле',
             pattern: {
-              value: /^\+?\d{10,15}$/,
+              value: /^\+7\d{10}$/,
               message: 'Введите корректный номер телефона',
             },
           })}

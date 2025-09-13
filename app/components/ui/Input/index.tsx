@@ -73,13 +73,13 @@ export default function Input(props: InputProps) {
         }}
         onFocus={() => setFocused(true)}
         className={clsx(
-          'w-full px-3 py-0.5 pt-[20px] border rounded-lg outline-none',
+          'w-full px-3 py-0.5 pt-[20px] border rounded-lg outline-none ',
           rest.disabled
             ? 'bg-(--bg-secondary)'
-            : 'focus:border-black focus:ring-black hover:border-black',
+            : 'focus:border-black focus:ring-black hover:border-black bg-white',
           error ? 'border-red-500' : 'border-(--gray-light)',
         )}
-        {...rest} // Остальные пропсы в конце!
+        {...rest}
       />
 
       {label && (

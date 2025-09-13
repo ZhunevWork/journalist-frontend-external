@@ -69,11 +69,12 @@ export default function CardProfileData() {
             </p>
           </div>
           <div>
-            <span className="text-(--gray) text-sm block md:mb-4 mb-1">
-              Карта болельщика
-            </span>
-
-            <p>{profileData?.fan_id}</p>
+            <Input
+              type="text"
+              label="Карта болельщика"
+              value={profileData?.fan_id ?? ''}
+              disabled={!!profileData?.fan_id}
+            />
           </div>
         </div>
       </div>

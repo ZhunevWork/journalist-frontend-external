@@ -13,7 +13,7 @@ export default function Button(props: ButtonProps) {
   return (
     <button
       className={clsx(
-        'h-12 px-2 rounded-xl disabled:bg-(--bg-disabled) transition-all cursor-pointer disabled:cursor-auto disabled:text-(--text-disabled) hover:opacity-90 font-medium min-w-12 text-center flex justify-center items-center',
+        'h-12 px-6 rounded-xl disabled:bg-(--bg-disabled) transition-all cursor-pointer disabled:cursor-auto disabled:text-(--text-disabled) hover:opacity-90 font-medium min-w-12 text-center flex justify-center items-center',
         classNames,
         styleType === 'default' && 'text-white bg-(--red)',
         styleType === 'primary' &&

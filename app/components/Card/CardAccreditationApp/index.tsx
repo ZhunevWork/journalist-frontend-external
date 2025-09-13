@@ -10,8 +10,6 @@ interface CardAccreditationAppProps {
 export default function CardAccreditationApp(props: CardAccreditationAppProps) {
   const { data } = props;
 
-  console.log('data in card', data);
-
   return (
     <label>
       <CardWrapper>
@@ -22,7 +20,7 @@ export default function CardAccreditationApp(props: CardAccreditationAppProps) {
             <p className="mb-3">
               {dayjs(data.date).format('D.MM dd, HH:mm')} — {data.type}
             </p>
-            <p className="flex items-center gap-2">
+            <p className="flex items-center gap-2 text-(--txt-secondary)">
               <img src="./icons/location.svg" alt="location" /> {data.location}
             </p>
           </div>

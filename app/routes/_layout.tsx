@@ -25,13 +25,17 @@ export default function AppLayout() {
 
   return (
     <>
-      <Header />
-      <main className={isAuthPage ? '' : 'min-h-11/12 overflow-auto'}>
+      <div className="flex">
         <Container classNames="flex gap-6 md:gap-20">
           {!isAuthPage && isMd && <Menu />}
-          <Outlet />
+          <div className="w-full">
+            <Header />
+            <main>
+              <Outlet />
+            </main>
+          </div>
         </Container>
-      </main>
+      </div>
       <Footer />
       <Container>{!isAuthPage && !isMd && <Menu />}</Container>
     </>

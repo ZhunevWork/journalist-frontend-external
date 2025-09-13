@@ -61,11 +61,16 @@ export default function Calendar({
         </div>
         {/* Calendar grid */}
         <div className="grid grid-cols-7 gap-1 md:gap-2.5">
-          {matrix.flat().map(({ date, isCurrentMonth }) => {
+          {matrix.flat().map(({ date, isCurrentMonth }, index) => {
             const data = dayData?.(date);
 
             return (
-              <Cell data={data} isCurrentMonth={isCurrentMonth} date={date} />
+              <Cell
+                key={index}
+                data={data}
+                isCurrentMonth={isCurrentMonth}
+                date={date}
+              />
             );
           })}
         </div>

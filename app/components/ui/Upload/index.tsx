@@ -17,8 +17,6 @@ const Upload = memo(function (props: UploadProps) {
   const [files, setFiles] = useState<UploadedFiles[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  console.log(files);
-
   const handleFiles = (files: FileList | null) => {
     if (!files) return;
     const newFiles: UploadedFiles[] = [];

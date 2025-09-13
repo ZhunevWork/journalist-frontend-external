@@ -11,16 +11,9 @@ export default function Header() {
 
   return (
     <header className="w-full bg-white">
-      <Container classNames="py-4 md:py-6.5 flex items-center">
-        {/* Логотип */}
-        <img
-          src="./icons/logo.svg"
-          alt="logo"
-          className="mr-4 md:mr-20 w-12 h-12 md:w-auto md:h-auto"
-        />
-
+      <div className="py-4 md:py-6.5 flex items-center">
         {/* Меню: скрыто на мобилках */}
-        <ul className="hidden md:flex items-center gap-8 md:gap-12 text-(--font-halvar) mr-auto">
+        <ul className="hidden md:flex items-center gap-8 md:gap-12 text-(--font-halvar) mr-auto ">
           <li>
             <Link to={''}>Поддержка</Link>
           </li>
@@ -65,7 +58,7 @@ export default function Header() {
             <div className="h-10 w-10 md:h-[60px] md:w-[60px] rounded-full bg-red-500"></div>
           </Link>
         </div>
-      </Container>
+      </div>
 
       {/* Drawer для уведомлений и мобильного меню */}
       <Drawer

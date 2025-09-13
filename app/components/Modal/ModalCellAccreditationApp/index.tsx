@@ -6,6 +6,7 @@ import ModalWrapper, {
 } from '~/components/Modal/ModalWrapper';
 import DateTabs from '~/components/ui/DateTabs';
 import type { Dayjs } from 'dayjs';
+import { useCallback, useEffect, useState } from 'react';
 
 interface ModalCellAccreditationAppProps extends ModalWrapperProps {
   date: Dayjs;
@@ -15,7 +16,19 @@ interface ModalCellAccreditationAppProps extends ModalWrapperProps {
 export default function ModalCellAccreditationApp(
   props: ModalCellAccreditationAppProps,
 ) {
-  const { events, date, open, onClose, children } = props;
+  const { events, date, open, onClose } = props;
+
+  const [activeEvent, setActiveEvent] = useState<IEvent | null>(null);
+
+  const handleChangeActiveEvent = useCallback((event: IEvent | null) => {
+    setActiveEvent(event);
+  }, []);
+
+  useEffect(() => {
+    if (!open) {
+      setActiveEvent(null);
+    }
+  }, [open]);
 
   if (!open) return null;
 
@@ -28,9 +41,12 @@ export default function ModalCellAccreditationApp(
       styles={{ backgroundColor: 'var(--bg-secondary)', maxHeight: 'none' }}
     >
       <div className="flex gap-8 max-h-[600px]">
-        <ListAccreditationApps events={events} />
+        <ListAccreditationApps
+          events={events}
+          onChangeActiveEvent={handleChangeActiveEvent}
+        />
 
-        <FormAccreditationApp />
+        <FormAccreditationApp data={activeEvent} />
       </div>
     </ModalWrapper>
   );
