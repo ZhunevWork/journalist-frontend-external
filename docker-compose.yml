@@ -6,7 +6,7 @@ services:
                 NODE_VERSION: 20.18.1-alpine3.19
             context: .
             dockerfile: Dockerfile
-        image: registry.dfx.li/loco/frontend-external-app
+        image: registry.ljournalist.ru/loco/frontend-external-app
         deploy:
             labels:
                 - "traefik.enable=true"
