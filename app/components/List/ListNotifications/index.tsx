@@ -2,13 +2,13 @@ import { useGetNotificationsQuery } from '~/api/controllers/notifications';
 import CardNotification from '~/components/Card/CardNotification';
 
 export default function ListNotifications() {
-  const { data, isError } = useGetNotificationsQuery({ page: 1 });
+  const { data, isError } = useGetNotificationsQuery({ page: 2 });
 
   if (isError || !data) return null;
 
   return (
     <ul className="flex flex-col gap-4">
-      {data.map(el => (
+      {data.data.map(el => (
         <li key={el.id}>
           <CardNotification {...el} />
         </li>

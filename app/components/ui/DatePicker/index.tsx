@@ -23,7 +23,6 @@ export default function DatePicker(props: DatePickerProps) {
     selected !== null && selected instanceof Date && !isNaN(selected.getTime());
 
   const handleChange = (date: Date | null) => {
-    console.log(date);
     setDate(date);
     if (onChange) {
       onChange(date);

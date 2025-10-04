@@ -19,6 +19,10 @@ export type StepOneFields = Pick<
 export type StepTwoFields = Pick<
   IRegisterArgs,
   | 'smi_type'
+  | 'smi_name'
+  | 'smi_url'
+  | 'documents'
+  | 'profile_photo'
   | 'fan_id'
   | 'accreditation_type'
   | 'password'

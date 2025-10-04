@@ -44,8 +44,6 @@ export default function Select(props: CustomSelectProps) {
   const hasValue = !!selected;
 
   const handleChange = (option: SingleValue<OptionType>) => {
-    console.log(option);
-
     setSelected(option);
     if (onChange && option) onChange(option.value);
   };

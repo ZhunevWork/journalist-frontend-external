@@ -1,4 +1,5 @@
 export interface IEvent {
+  id: number;
   name: string;
   location: string;
   type: string;
@@ -37,4 +38,9 @@ export interface IGetEventsResponse {
   data: IEvent[];
   links: IGetEventsLinks;
   meta: IGetEventsMeta;
+}
+
+export interface IGetEventsArgs {
+  month: string;
+  year: string;
 }

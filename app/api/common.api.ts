@@ -14,7 +14,7 @@ export const commonApi = createApi({
         headers.set('Authorization', `Bearer ${token}`);
       }
       headers.set('Accept', 'application/json');
-      headers.set('Content-Type', 'application/json');
+      // headers.set('Content-Type', 'application/json');
       return headers;
     },
   }),

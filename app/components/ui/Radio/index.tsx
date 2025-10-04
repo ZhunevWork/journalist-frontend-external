@@ -5,10 +5,11 @@ interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
   checked?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: React.ReactNode;
+  error?: boolean;
 }
 
 export function Radio(props: RadioProps) {
-  const { checked, onChange, label, ...rest } = props;
+  const { checked, onChange, label, error, ...rest } = props;
 
   return (
     <label
@@ -27,6 +28,7 @@ export function Radio(props: RadioProps) {
       <span
         className={clsx(
           'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors',
+          error ? 'border-red-500' : 'border-(--gray-light)',
           rest.disabled
             ? 'peer-checked:bg-(--icon-inactive) border-(--icon-inactive)'
             : 'peer-checked:bg-black border-black',

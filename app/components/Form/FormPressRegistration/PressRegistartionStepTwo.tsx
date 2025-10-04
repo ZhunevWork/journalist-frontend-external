@@ -1,49 +1,37 @@
-import { stepTwoDefaultValues } from '~/components/Form/FormPressRegistration/data';
-import type { StepTwoFields } from '~/components/Form/FormPressRegistration/types';
+import type { IRegisterArgs } from '~/api/controllers/auth/types';
 import Input from '~/components/ui/Input';
 import { Radio } from '~/components/ui/Radio';
 import Upload from '~/components/ui/Upload';
-import { loadFormFromSession, saveFormToSession } from '~/utils/FormSession';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, type UseFormReturn } from 'react-hook-form';
 
 interface PressRegistrationStepTwoProps {
-  onValidChange?: (valid: boolean) => void;
+  form: UseFormReturn<IRegisterArgs>;
 }
 
 export default function PressRegistrationStepTwo(
   props: PressRegistrationStepTwoProps,
 ) {
-  const { onValidChange } = props;
+  const { form } = props;
 
   const {
     register,
-    setValue,
     watch,
-    formState: { errors, isValid },
-  } = useForm<StepTwoFields>({
-    defaultValues: stepTwoDefaultValues,
-    mode: 'onChange',
-  });
-
-  useEffect(() => {
-    const saved = loadFormFromSession<StepTwoFields>('pressStepTwo');
-    if (saved) {
-      Object.entries(saved).forEach(([key, value]) => {
-        setValue(key as keyof StepTwoFields, value);
-      });
-    }
-  }, [setValue]);
-
-  useEffect(() => {
-    if (onValidChange) onValidChange(isValid);
-    console.log('Step One Validity:', isValid);
-  }, [isValid, onValidChange]);
+    control,
+    clearErrors,
+    formState: { errors },
+  } = form;
 
   const values = watch();
+  const smiType = watch('smi_type');
+
   useEffect(() => {
-    saveFormToSession('pressStepTwo', values);
-  }, [values]);
+    if (smiType === 'smi') {
+      clearErrors('smi_url');
+    } else if (smiType === 'bloger') {
+      clearErrors('documents');
+    }
+  }, []);
 
   return (
     <div>
@@ -53,46 +41,101 @@ export default function PressRegistrationStepTwo(
             id="smi"
             label="СМИ"
             value="smi"
-            defaultChecked
-            {...register('smi_type', { required: 'Обязательное поле' })}
+            error={!!errors.smi_type}
+            {...register('smi_type')}
           />
           <Radio
             id="bloger"
             label="Блогер/Фотограф"
             value="bloger"
-            {...register('smi_type', { required: 'Обязательное поле' })}
+            error={!!errors.smi_type}
+            {...register('smi_type')}
           />
         </div>
+
+        {smiType && (
+          <div className="mt-4 space-y-4">
+            <Input
+              label="Название СМИ/Блога"
+              value={values.smi_name}
+              {...register('smi_name')}
+              error={!!errors.smi_name}
+            />
+
+            {smiType === 'smi' && (
+              <div>
+                <span className="text-(--gray) mb-1.5 block">
+                  Документы СМИ
+                </span>
+                <Controller
+                  name="documents"
+                  control={control}
+                  render={({ field }) => (
+                    <Upload
+                      multiple
+                      classNames="mb-4"
+                      value={field.value || []}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </div>
+            )}
+
+            {smiType === 'bloger' && (
+              <Input
+                label="Ссылка на блог/соцсеть"
+                value={values.smi_url}
+                {...register('smi_url')}
+                error={!!errors.smi_url?.message}
+              />
+            )}
+          </div>
+        )}
       </div>
 
-      <span className="text-(--gray) mb-1.5">Личное фото</span>
-
-      <Upload multiple classNames="mb-4" />
+      <div>
+        <span className="text-(--gray) mb-1.5">Личное фото</span>
+        <Controller
+          name="profile_photo"
+          control={control}
+          render={({ field }) => (
+            <Upload
+              classNames="mb-4"
+              accept="image/*"
+              error={!!errors.profile_photo?.message}
+              {...field}
+            />
+          )}
+        />
+      </div>
 
       <Input
-        label="Карта болельшика (необязательно)"
+        label="Карта болельщика (необязательно)"
         value={values.fan_id}
         {...register('fan_id')}
         error={!!errors.fan_id}
         classNames="mb-4"
       />
 
-      <span className="text-(--gray) mb-1.5 block">Тип аккредитации</span>
-
-      <div className="grid grid-cols-2 gap-4 mb-5">
-        <Radio
-          id="press"
-          value="press"
-          label="Пресса"
-          defaultChecked
-          {...register('accreditation_type', { required: 'Обязательное поле' })}
-        />
-        <Radio
-          id="photo"
-          value="photo"
-          label="Фото"
-          {...register('accreditation_type', { required: 'Обязательное поле' })}
-        />
+      <div>
+        <span className="text-(--gray) mb-1.5 block">Тип аккредитации</span>
+        <div className="grid grid-cols-2 gap-4 mb-5">
+          <Radio
+            id="press"
+            value="press"
+            label="Пресса"
+            error={!!errors.accreditation_type}
+            {...register('accreditation_type')}
+          />
+          <Radio
+            id="photo"
+            value="photo"
+            label="Фото"
+            error={!!errors.accreditation_type}
+            {...register('accreditation_type')}
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -100,7 +143,7 @@ export default function PressRegistrationStepTwo(
           type="password"
           label="Пароль"
           value={values.password}
-          {...register('password', { required: 'Обязательное поле' })}
+          {...register('password')}
           error={!!errors.password}
         />
 
@@ -108,11 +151,7 @@ export default function PressRegistrationStepTwo(
           type="password"
           label="Повторите пароль"
           value={values.password_confirmation}
-          {...register('password_confirmation', {
-            required: 'Обязательное поле',
-            validate: value =>
-              value === watch('password') || 'Пароли должны совпадать',
-          })}
+          {...register('password_confirmation')}
           error={!!errors.password_confirmation}
         />
       </div>

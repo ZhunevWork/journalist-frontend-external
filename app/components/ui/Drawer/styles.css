@@ -1,6 +1,5 @@
 @media (max-width: 767px) {
   .drawer-adaptive {
-    width: 90vw !important;
     border-radius: 0 !important;
     min-width: 0 !important;
   }

@@ -5,16 +5,18 @@ import dayjs from 'dayjs';
 
 interface CardAccreditationAppProps {
   data: IEvent;
+  checked?: boolean;
+  onChange?: () => void;
 }
 
 export default function CardAccreditationApp(props: CardAccreditationAppProps) {
-  const { data } = props;
+  const { data, checked, onChange } = props;
 
   return (
     <label>
       <CardWrapper>
         <div className="flex items-start gap-4">
-          <Radio name="card" />
+          <Radio name="card" checked={checked} onChange={onChange} />
           <div>
             <h5 className="mb-4 font-bold text-lg">{data.name}</h5>
             <p className="mb-3">

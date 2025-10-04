@@ -1,11 +1,29 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useRegisterMutation } from '~/api/controllers/auth';
+import type { IRegisterArgs } from '~/api/controllers/auth/types';
+import {
+  stepOneDefaultValues,
+  stepTwoDefaultValues,
+} from '~/components/Form/FormPressRegistration/data';
 import PressRegistrationStepTwo from '~/components/Form/FormPressRegistration/PressRegistartionStepTwo';
 import PressRegistrationStepOne from '~/components/Form/FormPressRegistration/PressRegistrationStepOne';
+import {
+  formPressRegistrationValidationSchema,
+  stepOneSchema,
+  stepTwoSchema,
+} from '~/components/Form/FormPressRegistration/utils/formPressRegistrationValidationSchema';
 import Button from '~/components/ui/Button';
 import Checkbox from '~/components/ui/Checkbox';
-import React, { useState } from 'react';
+import Tabs, { Tab, type TabProps } from '~/components/ui/Tabs';
+import { useTabs } from '~/hooks/useTabs';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
-const steps = ['Личная информация', 'Аккредитация'];
+const steps: TabProps[] = [
+  { id: 1, title: 'Личная информация' },
+  { id: 2, title: 'Аккредитация' },
+];
 
 interface FormPressRegistrationProps {
   setIsAuth: () => void;
@@ -17,91 +35,108 @@ export default function FormPressRegistration(
   const { setIsAuth } = props;
   const [register] = useRegisterMutation();
 
-  const [step, setStep] = useState(1);
   const [isStepValid, setIsStepValid] = useState(false);
-  const [isAgree, setIsAgree] = useState(false);
 
-  const handleClick = () => {
-    if (step === 1) {
-      setStep(2);
-    } else {
-      const stepOneData = JSON.parse(
-        sessionStorage.getItem('pressStepOne') || '{}',
-      );
-      const stepTwoData = JSON.parse(
-        sessionStorage.getItem('pressStepTwo') || '{}',
-      );
-      const formData = {
-        ...stepOneData,
-        ...stepTwoData,
-        rules_agreement: true,
-      };
+  const { currentStep, setCurrentStep } = useTabs(1);
 
-      register(formData);
+  const form = useForm<IRegisterArgs>({
+    defaultValues: {
+      ...stepOneDefaultValues,
+      ...stepTwoDefaultValues,
+    } as IRegisterArgs,
+    mode: 'onSubmit',
+    resolver: yupResolver(formPressRegistrationValidationSchema),
+  });
+  const { control, handleSubmit, formState } = form;
+  const { isValid, errors } = formState;
+
+  const isStepOneValid = async (data: IRegisterArgs): Promise<boolean> => {
+    try {
+      await stepOneSchema.validate(data, { abortEarly: false });
+      return true;
+    } catch {
+      return false;
     }
   };
 
+  const isSteTwoValid = async (data: IRegisterArgs): Promise<boolean> => {
+    try {
+      await stepTwoSchema.validate(data, { abortEarly: false });
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const checkValidity = async () => {
+      const formData = form.getValues();
+      const a = await isSteTwoValid(formData);
+
+      if (currentStep === 1) {
+        const isStepValid = await isStepOneValid(formData);
+        setIsStepValid(isStepValid);
+      }
+    };
+
+    const subscription = form.watch(() => {
+      checkValidity();
+    });
+
+    checkValidity();
+
+    return () => subscription.unsubscribe();
+  }, [currentStep, form.watch, isValid]);
+
+  const handleClick = () => currentStep === 1 && setCurrentStep(2);
+  const onSubmit = (data: IRegisterArgs) => register(data);
+
   return (
-    <div className="p-12 rounded-3xl border-1 border-(--gray-light) shadow-lg shadow-gray-200 flex flex-col gap-8">
-      <h2 className="font-(family-name:--font-halvar) text-4xl">Регистрация</h2>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="sm:p-12 rounded-3xl sm:border-1 sm:border-(--gray-light) sm:shadow-lg sm:shadow-gray-200 flex flex-col gap-8"
+    >
+      <h2 className="font-(family-name:--font-halvar) sm:text-4xl text-2xl">
+        Регистрация
+      </h2>
 
-      <div className="flex justify-between items-center">
-        {steps.map((item, index) => (
-          <React.Fragment key={index}>
-            <p className="flex items-center gap-2.5 text-nowrap">
-              <span
-                className={`w-6 h-6 flex justify-center items-center rounded-full text-xs 
-								${
-                  step === index + 1
-                    ? 'bg-black text-white'
-                    : index === 0 && step === 2
-                      ? 'bg-(--status-success) text-white'
-                      : 'bg-gray-100'
-                }
-								`}
-              >
-                {index === 0 && step === 2 ? (
-                  <img src="./icons/check.svg" alt="check" />
-                ) : (
-                  index + 1
-                )}
-              </span>
-              {item}
-            </p>
-            {index < steps.length - 1 && (
-              <div className="w-full h-px bg-(--gray-light) mx-5" />
-            )}
-          </React.Fragment>
+      <Tabs selectedId={currentStep} onChange={index => setCurrentStep(index)}>
+        {steps.map(el => (
+          <Tab {...el} disabled={currentStep === 1 && !isStepValid} />
         ))}
-      </div>
+      </Tabs>
 
-      {step === 1 && (
-        <PressRegistrationStepOne onValidChange={setIsStepValid} />
-      )}
-      {step === 2 && (
-        <PressRegistrationStepTwo onValidChange={setIsStepValid} />
-      )}
+      {currentStep === 1 && <PressRegistrationStepOne form={form} />}
+      {currentStep === 2 && <PressRegistrationStepTwo form={form} />}
 
-      <Checkbox
-        checked={isAgree}
-        onChange={() => setIsAgree(!isAgree)}
-        label={
-          <>
-            Согласен с{' '}
-            <a href="#" className="text-(--green) underline">
-              правилами сервиса
-            </a>
-          </>
-        }
+      <Controller
+        name="rules_agreement"
+        control={control}
+        render={({ field }) => (
+          <Checkbox
+            checked={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            error={!!errors.rules_agreement}
+            label={
+              <>
+                Согласен с{' '}
+                <a href="#" className="text-(--green) underline">
+                  правилами сервиса
+                </a>
+              </>
+            }
+          />
+        )}
       />
 
       <Button
-        type="submit"
+        type={currentStep === 2 ? 'submit' : 'button'}
         classNames="w-full"
         onClick={handleClick}
-        disabled={!isStepValid || (step === 2 && !isAgree)}
+        disabled={!isStepValid}
       >
-        {step === 1 ? 'Продолжить' : 'Оставить заявку'}
+        {currentStep === 1 ? 'Продолжить' : 'Оставить заявку'}
       </Button>
 
       <div className="flex justify-center">
@@ -113,6 +148,6 @@ export default function FormPressRegistration(
           Войти
         </button>
       </div>
-    </div>
+    </form>
   );
 }

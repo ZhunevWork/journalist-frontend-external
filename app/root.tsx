@@ -16,6 +16,7 @@ import './app.css';
 
 import { store } from '~/store';
 import dayjs from 'dayjs';
+import { Toaster } from 'sonner';
 
 dayjs.locale('ru');
 
@@ -53,6 +54,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <Provider store={store}>
+      <Toaster
+        visibleToasts={Infinity}
+        richColors
+        expand={false}
+        position="top-right"
+        closeButton
+        toastOptions={{
+          duration: 3000,
+          className: 'toaster-class',
+        }}
+      />
       <Outlet />
     </Provider>
   );

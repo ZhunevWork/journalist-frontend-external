@@ -1,32 +1,53 @@
 import clsx from 'clsx';
-import { memo, useRef, useState } from 'react';
-
-interface UploadedFiles {
-  url: string;
-  file: File;
-}
+import { memo, useEffect, useRef, useState } from 'react';
 
 interface UploadProps {
   multiple?: boolean;
   classNames?: string;
+  value?: File | File[] | null;
+  onChange?: (files: File | File[] | null) => void;
+  name?: string;
+  accept?: string;
+  error?: boolean;
 }
 
 const Upload = memo(function (props: UploadProps) {
-  const { multiple, classNames } = props;
+  const { multiple, classNames, value, onChange, name, accept, error } = props;
 
-  const [files, setFiles] = useState<UploadedFiles[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFiles = (files: FileList | null) => {
-    if (!files) return;
-    const newFiles: UploadedFiles[] = [];
-    Array.from(files).forEach(file => {
-      if (file.type.startsWith('image/')) {
-        const url = URL.createObjectURL(file);
-        newFiles.push({ url, file });
-      }
-    });
-    setFiles(prev => [...prev, ...newFiles]);
+  // Синхронизация с внешним value
+  useEffect(() => {
+    if (multiple) {
+      setFiles(Array.isArray(value) ? value : []);
+    } else {
+      setFiles(value && !Array.isArray(value) ? [value] : []);
+    }
+  }, [value, multiple]);
+
+  const handleFiles = (selectedFiles: FileList | null) => {
+    if (!selectedFiles) return;
+
+    const newFiles: File[] = Array.from(selectedFiles);
+    let updatedFiles: File[];
+
+    if (multiple) {
+      // Для множественной загрузки добавляем к существующим
+      updatedFiles = [...files, ...newFiles];
+    } else {
+      // Для одиночной загрузки заменяем все файлы (берем только первый)
+      updatedFiles = newFiles.length > 0 ? [newFiles[0]] : [];
+    }
+
+    setFiles(updatedFiles);
+
+    // Отправляем наружу в зависимости от режима
+    if (multiple) {
+      onChange?.(updatedFiles);
+    } else {
+      onChange?.(updatedFiles.length > 0 ? updatedFiles[0] : null);
+    }
   };
 
   const handleUploadClick = () => {
@@ -34,42 +55,80 @@ const Upload = memo(function (props: UploadProps) {
   };
 
   const handleRemove = (index: number) => {
-    setFiles(prev => {
-      // Revoke object URL to avoid memory leaks
-      URL.revokeObjectURL(prev[index].url);
-      return prev.filter((_, i) => i !== index);
-    });
+    const updatedFiles = files.filter((_, i) => i !== index);
+    setFiles(updatedFiles);
+
+    // Отправляем наружу в зависимости от режима
+    if (multiple) {
+      onChange?.(updatedFiles);
+    } else {
+      onChange?.(updatedFiles.length > 0 ? updatedFiles[0] : null);
+    }
+  };
+
+  // Функция для создания временного URL для превью (только для изображений)
+  const getFileUrl = (file: File): string => {
+    return URL.createObjectURL(file);
+  };
+
+  // Функция для получения иконки в зависимости от типа файла
+  const getFileIcon = (file: File): string => {
+    const fileType = file.type;
+
+    if (fileType.startsWith('image/')) {
+      return getFileUrl(file); // возвращаем URL для превью изображения
+    } else {
+      return '';
+    }
+  };
+
+  // Функция для проверки, является ли файл изображением
+  const isImageFile = (file: File): boolean => {
+    return file.type.startsWith('image/');
   };
 
   return (
     <div
       className={clsx(
-        'flex',
-        multiple &&
-          'items-center h-[88px] border border-(--gray-light) rounded-[10px] px-[14px]',
+        'flex items-center h-[88px] bg-white border rounded-[10px] px-[14px]',
+        error ? 'border-red-500' : 'border-(--gray-light)',
         classNames,
       )}
     >
       <input
         type="file"
-        multiple
-        accept="image/*"
+        multiple={multiple}
+        accept={accept}
         ref={inputRef}
         className="hidden"
         onChange={e => handleFiles(e.target.files)}
+        name={name}
       />
       <div className="flex gap-2 flex-wrap">
-        {files.map((img, idx) => (
+        {files.map((file, idx) => (
           <div key={idx} className="relative w-[60px] h-[60px]">
-            <img
-              src={img.url}
-              alt={`uploaded-${idx}`}
-              className="w-[60px] h-[60px] object-cover rounded"
-            />
+            {isImageFile(file) ? (
+              <img
+                src={getFileIcon(file)}
+                alt={`uploaded-${idx}`}
+                className="w-[60px] h-[60px] object-cover rounded"
+              />
+            ) : (
+              <div className="w-[60px] h-[60px] bg-(--gray-light) rounded flex flex-col items-center justify-center p-1">
+                <img
+                  src={getFileIcon(file)}
+                  alt={file.type}
+                  className="w-6 h-6 object-contain mb-1"
+                />
+                <span className="text-xs text-gray-600 truncate w-full text-center">
+                  {file.name.split('.').pop()?.toUpperCase()}
+                </span>
+              </div>
+            )}
             <button
               type="button"
               onClick={() => handleRemove(idx)}
-              className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs border-2 border-white"
               title="Удалить"
             >
               ×

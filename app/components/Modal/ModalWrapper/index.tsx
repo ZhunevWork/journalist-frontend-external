@@ -50,7 +50,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
         className={clsx(
           'bg-white relative rounded-t-[28px] lg:rounded-[28px]',
           'w-full lg:max-h-[80vh] lg:max-w-[720px] h-fit max-h-[90vh] lg:h-auto',
-          'overflow-y-auto shadow-lg min-w-[320px] p-8 pb-12 lg:pb-8',
+          'overflow-y-auto shadow-lg min-w-[320px] lg:p-8 p-4 pb-12 lg:pb-8',
           classNames,
         )}
         style={styles}

@@ -37,28 +37,28 @@ export interface IProfileData {
 }
 
 export interface IRegisterArgs {
-  last_name: string;
   name: string;
   middle_name?: string;
+  last_name: string;
   phone: string;
   email: string;
   password: string;
   password_confirmation: string;
-  birthday?: string;
-  passport_series?: string;
-  passport_number?: string;
-  issue_date?: string;
-  who_issues?: string;
-  department_code?: string;
-  birth_place?: string;
+  birthday: string;
+  passport_series: string;
+  passport_number: string;
+  issue_date: string;
+  who_issues: string;
+  department_code: string;
+  birth_place: string;
   rules_agreement: boolean;
-  smi_type?: string;
-  accreditation_type?: string;
-  smi_name?: string;
-  smi_url?: string;
+  smi_type: string;
+  accreditation_type: string;
+  smi_name: string;
+  smi_url: string;
   fan_id?: string;
-  profile_photo?: string;
-  documents?: string[];
+  profile_photo?: File;
+  documents?: File[];
 }
 export interface IRegisterResponse {
   message: string;

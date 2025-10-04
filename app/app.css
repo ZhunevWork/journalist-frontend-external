@@ -26,7 +26,6 @@
 
 @theme {
   --font-halvar: 'Halvar Breitschrift', sans-serif;
-
   --gray: rgb(131, 121, 122);
   --gray-light: rgb(237, 233, 234);
   --green: #348d8b;
@@ -38,6 +37,7 @@
   --border-disabled: #b5b0b1;
   --text-disabled: rgb(181, 176, 177);
   --status-success: rgb(66, 209, 46);
+  --status-alert: rgba(232, 0, 36, 1);
   --icon-inactive: rgb(131, 121, 122);
 }
 

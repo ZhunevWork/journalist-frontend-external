@@ -7,6 +7,7 @@ interface DrawerProps {
   open: boolean;
   onClose: () => void;
   title?: React.ReactNode;
+  header?: React.ReactNode;
   children: React.ReactNode;
   width?: number | string;
   position?: 'right' | 'left' | 'bottom' | 'top';
@@ -17,6 +18,7 @@ export default function Drawer({
   open,
   onClose,
   title,
+  header,
   children,
   width = 556,
   position = 'right',
@@ -65,7 +67,7 @@ export default function Drawer({
       ? typeof width === 'number'
         ? `${width}px`
         : width
-      : '100%';
+      : 'fit-content';
 
   return (
     <>
@@ -103,7 +105,7 @@ export default function Drawer({
               ? 'md:rounded-r-3xl'
               : position === 'bottom'
                 ? 'md:rounded-t-3xl'
-                : 'md:rounded-b-3xl',
+                : 'rounded-b-2xl',
         )}
         style={
           position === 'right' || position === 'left'
@@ -121,26 +123,30 @@ export default function Drawer({
         role="dialog"
       >
         <div className="drawer-adaptive flex flex-col h-full">
-          <div className="flex items-center justify-between mb-6">
-            {title && <div className="text-[22px] font-medium">{title}</div>}
-            {showCloseButton && (
-              <button
-                onClick={onClose}
-                className="p-2 rounded hover:bg-gray-100 transition"
-                aria-label="Закрыть"
-              >
-                <svg
-                  width={24}
-                  height={24}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
+          {header ? (
+            header
+          ) : (
+            <div className="flex items-center justify-between mb-6">
+              {title && <div className="text-[22px] font-medium">{title}</div>}
+              {showCloseButton && (
+                <button
+                  onClick={onClose}
+                  className="p-2 rounded hover:bg-gray-100 transition"
+                  aria-label="Закрыть"
                 >
-                  <path d="M6 6l12 12M6 18L18 6" stroke="var(--gray)" />
-                </svg>
-              </button>
-            )}
-          </div>
+                  <svg
+                    width={24}
+                    height={24}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path d="M6 6l12 12M6 18L18 6" stroke="var(--gray)" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          )}
           <div className="flex-1 overflow-y-auto">{children}</div>
         </div>
       </div>
