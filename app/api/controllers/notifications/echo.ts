@@ -3,28 +3,29 @@ import {
   echoIsConfigured,
   useEchoNotification,
 } from '@laravel/echo-react';
+import { useGetNotificationsQuery } from '~/api/controllers/notifications';
 import type { INotification } from '~/api/controllers/notifications/types';
 
 export function initializeEcho() {
-  // if (echoIsConfigured()) {
-  //   echo().disconnect();
-  // }
-
   const token = localStorage.getItem('userToken');
   if (!token) {
-    console.error('Echo: Auth token not found.');
     return;
   }
 
+  if (echoIsConfigured()) return;
+
   configureEcho({
-    broadcaster: 'reverb',
-    key: 'journalist',
-    wsHost: 'localhost',
-    wsPort: 6001,
-    wssPort: 6001,
+    broadcaster: 'pusher',
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    wsHost: import.meta.env.VITE_PUSHER_HOST,
+    wsPort: 8080,
+    wssPort: import.meta.env.VITE_PUSHER_PORT,
     forceTLS: false,
-    enabledTransports: ['ws'],
-    authEndpoint: 'http://localhost:8080/broadcasting/auth',
+    encrypted: true,
+    disableStats: true,
+    enabledTransports: ['ws', 'wss'],
+    authEndpoint: `${import.meta.env.VITE_API_BASE_URL}/broadcasting/auth`,
     auth: {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -34,15 +35,14 @@ export function initializeEcho() {
 }
 
 export function useUserNotifications(userId: number) {
-  if (!echoIsConfigured()) {
-    console.warn('Echo еще не сконфигурирован, подписка не выполнена.');
-    return;
-  }
+  const { refetch } = useGetNotificationsQuery({ page: 1 });
+
+  if (!userId || !echoIsConfigured()) return;
 
   useEchoNotification<INotification>(
     `App.Models.User.${userId}`,
     (notification: INotification) => {
-      console.log('Новое уведомление:', notification);
+      refetch();
     },
     [],
     [userId],
