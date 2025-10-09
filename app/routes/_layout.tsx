@@ -1,3 +1,4 @@
+import { initializeEcho } from '~/api/controllers/notifications/echo';
 import Footer from '~/components/Footer';
 import Header from '~/components/Header';
 import Menu from '~/components/Menu';
@@ -14,6 +15,7 @@ export default function AppLayout() {
   const location = useLocation();
   const { isMd } = useResponsive();
   const isAuthPage = location.pathname === RouterPaths.AUTH;
+  initializeEcho();
 
   useEffect(() => {
     if (!userToken && !isAuthPage) {
