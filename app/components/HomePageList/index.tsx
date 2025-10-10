@@ -1,9 +1,9 @@
-import { useGetAccrerditationsQuery } from '~/api/controllers/accreditation';
+import { useGetAccreditationsQuery } from '~/api/controllers/accreditation';
 import ListAccreditations from '~/components/List/ListAccreditations';
 import { Link } from 'react-router';
 
 export default function HomePageList() {
-  const { data: accreditations } = useGetAccrerditationsQuery();
+  const { data: accreditations } = useGetAccreditationsQuery();
 
   console.log(accreditations);
 

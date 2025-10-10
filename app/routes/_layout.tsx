@@ -15,6 +15,7 @@ export default function AppLayout() {
   const location = useLocation();
   const { isMd } = useResponsive();
   const isAuthPage = location.pathname === RouterPaths.AUTH;
+
   initializeEcho();
 
   useEffect(() => {
@@ -24,6 +25,11 @@ export default function AppLayout() {
       navigate(RouterPaths.HOME);
     }
   }, [userToken, isAuthPage, navigate]);
+
+  // Если неавторизован и не на странице auth - не рендерим ничего
+  if (!userToken && !isAuthPage) {
+    return null;
+  }
 
   return (
     <>

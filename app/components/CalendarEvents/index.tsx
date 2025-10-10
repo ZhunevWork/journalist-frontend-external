@@ -3,7 +3,7 @@ import type { IEvent } from '~/api/controllers/events/types';
 import Calendar from '~/components/ui/Calendar';
 import type { CalendarDayData } from '~/components/ui/Calendar/types';
 import dayjs, { type Dayjs } from 'dayjs';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export default function CalendarEvents() {
   const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());

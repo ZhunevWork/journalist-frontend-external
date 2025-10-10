@@ -1,10 +1,9 @@
 import { useUserNotifications } from '~/api/controllers/notifications/echo';
 import CalendarEvents from '~/components/CalendarEvents';
 import HomePageList from '~/components/HomePageList';
-import ListAccreditations from '~/components/List/ListAccreditations';
+import { useAppSelector } from '~/hooks/redux';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router';
 
 import type { Route } from './+types/home';
 
@@ -13,6 +12,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+  const token = useAppSelector(state => state.auth.userToken);
   const userData = useSelector((state: any) => state.auth.userData);
   const userId = userData?.id;
   useEffect(() => {
@@ -22,6 +22,8 @@ export default function Home() {
   }, []);
 
   useUserNotifications(userId);
+
+  if (!token) return null;
 
   return (
     <div className="flex flex-col w-full">

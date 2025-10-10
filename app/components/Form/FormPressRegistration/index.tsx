@@ -18,7 +18,6 @@ import Tabs, { Tab, type TabProps } from '~/components/ui/Tabs';
 import { useTabs } from '~/hooks/useTabs';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 
 const steps: TabProps[] = [
   { id: 1, title: 'Личная информация' },
@@ -89,7 +88,11 @@ export default function FormPressRegistration(
   }, [currentStep, form.watch, isValid]);
 
   const handleClick = () => currentStep === 1 && setCurrentStep(2);
-  const onSubmit = (data: IRegisterArgs) => register(data);
+  const onSubmit = (data: IRegisterArgs) => {
+    console.log(data);
+
+    register(data);
+  };
 
   return (
     <form

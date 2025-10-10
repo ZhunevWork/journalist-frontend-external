@@ -1,11 +1,14 @@
 import { commonApi } from '~/api/common.api';
-import type { GetAccreditationsResponse, ICreateAccreditationArgs } from '~/api/controllers/accreditation/types';
+import type {
+  GetAccreditationsResponse,
+  ICreateAccreditationArgs,
+} from '~/api/controllers/accreditation/types';
 
 const CONTROLLER_URL = 'accreditations';
 
 export const accreditationController = commonApi.injectEndpoints({
   endpoints: builder => ({
-    getAccrerditations: builder.query<GetAccreditationsResponse, void>({
+    getAccreditations: builder.query<GetAccreditationsResponse, void>({
       query: () => ({
         url: '/me/' + CONTROLLER_URL,
       }),
@@ -34,5 +37,5 @@ export const accreditationController = commonApi.injectEndpoints({
   }),
 });
 
-export const { useGetAccrerditationsQuery, useCreateAccreditationMutation } =
+export const { useGetAccreditationsQuery, useCreateAccreditationMutation } =
   accreditationController;

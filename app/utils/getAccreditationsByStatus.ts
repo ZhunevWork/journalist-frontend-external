@@ -1,4 +1,4 @@
-import { useGetAccrerditationsQuery } from '~/api/controllers/accreditation';
+import { useGetAccreditationsQuery } from '~/api/controllers/accreditation';
 import type { IAccreditation } from '~/api/controllers/accreditation/types';
 
 type AccreditationStatus = 'in_progress' | 'approved' | 'rejected';
@@ -6,7 +6,7 @@ type AccreditationStatus = 'in_progress' | 'approved' | 'rejected';
 export const getAccreditationsByStatus = (
   status: AccreditationStatus,
 ): IAccreditation[] => {
-  const { data: accreditations } = useGetAccrerditationsQuery();
+  const { data: accreditations } = useGetAccreditationsQuery();
 
   if (!accreditations) return [];
 
