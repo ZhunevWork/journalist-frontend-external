@@ -10,7 +10,7 @@ services:
         deploy:
             labels:
                 - "traefik.enable=true"
-                - "traefik.http.routers.frontend-staff.rule=Host(`staff.ljournalist.ru`)"
+                - "traefik.http.routers.frontend-staff.rule=Host(`ljournalist.ru`)"
                 - "traefik.http.services.frontend-staff.loadBalancer.server.port=8080"
                 - "traefik.http.routers.frontend-staff.middlewares=secHeaders@file"
             restart_policy:
