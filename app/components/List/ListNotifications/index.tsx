@@ -2,7 +2,7 @@ import { useGetNotificationsQuery } from '~/api/controllers/notifications';
 import CardNotification from '~/components/Card/CardNotification';
 
 export default function ListNotifications() {
-  const { data, isError } = useGetNotificationsQuery({ page: 2 });
+  const { data, isError } = useGetNotificationsQuery({ page: 1 });
 
   if (isError || !data) return null;
 

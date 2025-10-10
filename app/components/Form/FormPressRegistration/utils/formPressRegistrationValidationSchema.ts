@@ -67,7 +67,7 @@ export const formPressRegistrationValidationSchema = yup
     smi_type: yup
       .string()
       .required('Обязательное поле')
-      .oneOf(['smi', 'bloger'], 'Выберите тип СМИ'),
+      .oneOf(['mass_media', 'blogger/photographer'], 'Выберите тип СМИ'),
 
     smi_name: yup
       .string()

@@ -26,9 +26,9 @@ export default function PressRegistrationStepTwo(
   const smiType = watch('smi_type');
 
   useEffect(() => {
-    if (smiType === 'smi') {
+    if (smiType === 'mass_media') {
       clearErrors('smi_url');
-    } else if (smiType === 'bloger') {
+    } else if (smiType === 'blogger/photographer') {
       clearErrors('documents');
     }
   }, []);
@@ -40,14 +40,14 @@ export default function PressRegistrationStepTwo(
           <Radio
             id="smi"
             label="СМИ"
-            value="smi"
+            value="mass_media"
             error={!!errors.smi_type}
             {...register('smi_type')}
           />
           <Radio
             id="bloger"
             label="Блогер/Фотограф"
-            value="bloger"
+            value="blogger/photographer"
             error={!!errors.smi_type}
             {...register('smi_type')}
           />
@@ -62,7 +62,7 @@ export default function PressRegistrationStepTwo(
               error={!!errors.smi_name}
             />
 
-            {smiType === 'smi' && (
+            {smiType === 'mass_media' && (
               <div>
                 <span className="text-(--gray) mb-1.5 block">
                   Документы СМИ
@@ -82,7 +82,7 @@ export default function PressRegistrationStepTwo(
               </div>
             )}
 
-            {smiType === 'bloger' && (
+            {smiType === 'blogger/photographer' && (
               <Input
                 label="Ссылка на блог/соцсеть"
                 value={values.smi_url}
