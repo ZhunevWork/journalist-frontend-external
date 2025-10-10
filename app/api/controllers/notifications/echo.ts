@@ -1,10 +1,5 @@
-import {
-  configureEcho,
-  echoIsConfigured,
-  useEchoNotification,
-} from '@laravel/echo-react';
+import { configureEcho, echoIsConfigured, useEcho } from '@laravel/echo-react';
 import { useGetNotificationsQuery } from '~/api/controllers/notifications';
-import type { INotification } from '~/api/controllers/notifications/types';
 
 export function initializeEcho() {
   const token = localStorage.getItem('userToken');
@@ -39,12 +34,12 @@ export function useUserNotifications(userId: number) {
 
   if (!userId || !echoIsConfigured()) return;
 
-  useEchoNotification<INotification>(
+  useEcho(
     `App.Models.User.${userId}`,
-    (notification: INotification) => {
+    '.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
+    (data: any) => {
       refetch();
     },
-    [],
     [userId],
   );
 }

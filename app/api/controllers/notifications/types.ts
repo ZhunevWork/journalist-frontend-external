@@ -8,6 +8,19 @@ interface INotificationModel {
   link: string;
   text_link: string;
   is_fan_id: boolean;
+  event: IEventNotificationModel
+}
+
+interface IEventNotificationModel {
+  date: string,
+  finish: string,
+  id: number,
+  is_fan_id: boolean,
+  link: string,
+  location: string,
+  name: string,
+  text_link: string,
+  type: string
 }
 
 export interface INotificationData {
