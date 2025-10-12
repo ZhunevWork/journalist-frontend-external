@@ -4,7 +4,7 @@ import React from 'react';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   classNames?: string;
-  styleType?: 'default' | 'primary' | 'secondary' | 'tertiary';
+  styleType?: 'default' | 'primary' | 'secondary' | 'tertiary' | 'transparent';
 }
 
 export default function Button(props: ButtonProps) {
@@ -21,6 +21,8 @@ export default function Button(props: ButtonProps) {
         styleType === 'secondary' &&
           'bg-(--bg-secondary) hover:bg-white border border-(--gray-light)',
         styleType === 'tertiary' && 'bg-(--bg-brand) text-white',
+        styleType === 'transparent' &&
+          'bg-transparent hover:bg-(--gray-light) border-none',
       )}
       {...rest}
     >

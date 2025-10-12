@@ -11,10 +11,11 @@ interface DatePickerProps {
   onChange?: (date: Date | null) => void;
   selected?: Date;
   classNames?: string;
+  showYearDropdown?: boolean;
 }
 
 export default function DatePicker(props: DatePickerProps) {
-  const { error, label, onChange, classNames, selected } = props;
+  const { error, label, onChange, classNames, selected, ...rest } = props;
 
   const [date, setDate] = useState<Date | null>(null);
   const [focused, setFocused] = useState(false);
@@ -48,6 +49,7 @@ export default function DatePicker(props: DatePickerProps) {
         )}
         calendarClassName="rounded-lg shadow-lg border border-(--bg-secondary)"
         popperClassName="z-50"
+        {...rest}
       />
       {label && (
         <span

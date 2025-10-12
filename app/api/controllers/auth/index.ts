@@ -80,6 +80,7 @@ export const authController = commonApi.injectEndpoints({
           body: formData,
         };
       },
+      transformResponse: (res: any) => res.data,
     }),
     logout: builder.mutation<void, void>({
       query: () => ({

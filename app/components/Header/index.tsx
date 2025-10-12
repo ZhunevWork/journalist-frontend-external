@@ -18,6 +18,7 @@ function Menu({
 }) {
   const { isMd } = useResponsive();
   const token = useAppSelector(s => s.auth.userToken);
+  const avatar = useAppSelector(s => s.auth.profileData?.profile_photo.url);
 
   return (
     <div className="py-4 md:py-6.5 flex items-center w-full">
@@ -55,8 +56,8 @@ function Menu({
             </button>
 
             <Link to={RouterPaths.PROFILE}>
-              <div className="flex justify-center items-center h-12 w-12 md:h-[60px] md:w-[60px] rounded-full bg-(--bg-brand)">
-                <img src="./icons/user-logo.svg" alt="logo" />
+              <div className="flex justify-center items-center h-12 w-12 md:h-[60px] md:w-[60px] rounded-full bg-(--bg-brand) overflow-hidden">
+                <img src={avatar ?? './icons/user-logo.svg'} alt="logo" />
               </div>
             </Link>
           </>

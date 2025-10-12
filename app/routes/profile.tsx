@@ -1,7 +1,7 @@
 import CardProfileData from '~/components/Card/CardProfileData';
 import CardProfileFiles from '~/components/Card/CardProfileFlies';
 import Button from '~/components/ui/Button';
-import { useAppDispatch } from '~/hooks/redux';
+import { useAppDispatch, useAppSelector } from '~/hooks/redux';
 import { setUserLogout } from '~/store/authSlice';
 
 import type { Route } from '.react-router/types/app/routes/+types/profile';
@@ -13,6 +13,8 @@ export function meta({}: Route.MetaArgs) {
 export default function Profile() {
   const dispatch = useAppDispatch();
 
+  const userData = useAppSelector(s => s.auth.userData);
+
   const handleLogout = () => {
     dispatch(setUserLogout());
   };
@@ -20,7 +22,7 @@ export default function Profile() {
   return (
     <div className="w-full">
       <h1 className="font-(family-name:--font-halvar) text-4xl mb-8">
-        Здравствуйте, Александр
+        Здравствуйте, {userData?.name}
       </h1>
 
       <div className="flex flex-col lg:flex-row gap-8 w-full mb-11">

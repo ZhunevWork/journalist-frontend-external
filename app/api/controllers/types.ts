@@ -26,3 +26,12 @@ export interface PaginationMeta {
   to: number;
   total: number;
 }
+
+export interface FileType {
+  id: number;
+  name: string;
+  url: string;
+  extension: string;
+  full_name: string;
+  size: number;
+}

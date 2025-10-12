@@ -3,6 +3,7 @@ import Footer from '~/components/Footer';
 import Header from '~/components/Header';
 import Menu from '~/components/Menu';
 import Container from '~/components/ui/Container';
+import { useAppSelector } from '~/hooks/redux';
 import { useResponsive } from '~/hooks/useResponsive';
 import { RouterPaths } from '~/routes';
 import { useEffect } from 'react';
@@ -11,6 +12,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router';
 
 export default function AppLayout() {
   const userToken = useSelector((state: any) => state.auth.userToken);
+  const profileData = useAppSelector(s => s.auth.profileData);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { isMd } = useResponsive();
@@ -19,7 +22,11 @@ export default function AppLayout() {
   initializeEcho();
 
   useEffect(() => {
-    if (!userToken && !isAuthPage) {
+    if (
+      (!userToken && !isAuthPage) ||
+      !profileData?.is_approved ||
+      profileData.deleted
+    ) {
       navigate(RouterPaths.AUTH);
     } else if (userToken && isAuthPage) {
       navigate(RouterPaths.HOME);
