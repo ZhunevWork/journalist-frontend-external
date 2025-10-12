@@ -15,7 +15,9 @@ import {
 import Button from '~/components/ui/Button';
 import Checkbox from '~/components/ui/Checkbox';
 import Tabs, { Tab, type TabProps } from '~/components/ui/Tabs';
+import { useAppDispatch } from '~/hooks/redux';
 import { useTabs } from '~/hooks/useTabs';
+import { setProfileData, setUserData, setUserToken } from '~/store/authSlice';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -33,6 +35,7 @@ export default function FormPressRegistration(
 ) {
   const { setIsAuth } = props;
   const [register] = useRegisterMutation();
+  const dispatch = useAppDispatch();
 
   const [isStepValid, setIsStepValid] = useState(false);
 
@@ -87,17 +90,25 @@ export default function FormPressRegistration(
     return () => subscription.unsubscribe();
   }, [currentStep, form.watch, isValid]);
 
-  const handleClick = () => currentStep === 1 && setCurrentStep(2);
   const onSubmit = (data: IRegisterArgs) => {
-    console.log(data);
+    register(data)
+      .unwrap()
+      .then(res => {
+        console.log(res);
 
-    register(data);
+        if (res?.token) {
+          dispatch(setUserToken(res.token));
+          dispatch(setUserData(res.user));
+          dispatch(setProfileData(res.profile));
+          setIsAuth();
+        }
+      });
   };
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
       className="sm:p-12 rounded-3xl sm:border-1 sm:border-(--gray-light) sm:shadow-lg sm:shadow-gray-200 flex flex-col gap-8"
+      onSubmit={handleSubmit(onSubmit)}
     >
       <h2 className="font-(family-name:--font-halvar) sm:text-4xl text-2xl">
         Регистрация
@@ -133,14 +144,22 @@ export default function FormPressRegistration(
         )}
       />
 
-      <Button
-        type={currentStep === 2 ? 'submit' : 'button'}
-        classNames="w-full"
-        onClick={handleClick}
-        disabled={!isStepValid}
-      >
-        {currentStep === 1 ? 'Продолжить' : 'Оставить заявку'}
-      </Button>
+      {currentStep === 1 && (
+        <Button
+          type="button"
+          classNames="w-full"
+          onClick={() => setCurrentStep(2)}
+          disabled={!isStepValid}
+        >
+          Продолжить
+        </Button>
+      )}
+
+      {currentStep === 2 && (
+        <Button type="submit" classNames="w-full" disabled={!isStepValid}>
+          Оставить заявку
+        </Button>
+      )}
 
       <div className="flex justify-center">
         <span>Есть аккаунт?</span> &nbsp;

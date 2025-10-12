@@ -30,6 +30,8 @@ const authSlice = createSlice({
   reducers: {
     setUserLogout: state => {
       localStorage.removeItem(USER_TOKEN);
+      localStorage.removeItem(USER_DATA);
+      localStorage.removeItem(PROFILE_DATA);
 
       state.profileData = null;
       state.userData = null;

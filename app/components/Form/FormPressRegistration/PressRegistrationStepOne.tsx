@@ -120,6 +120,7 @@ export default function PressRegistrationStepOne(
             selected={field.value ? new Date(field.value) : undefined}
             onChange={date => field.onChange(date ? date.toISOString() : '')}
             error={!!fieldState.error}
+            showYearDropdown
           />
         )}
       />
@@ -153,6 +154,7 @@ export default function PressRegistrationStepOne(
               onChange={date => field.onChange(date ? date.toISOString() : '')}
               error={!!fieldState.error}
               classNames="sm:max-w-[165px] col-span-2"
+              showYearDropdown
             />
           )}
         />
