@@ -88,8 +88,26 @@ export const authController = commonApi.injectEndpoints({
         method: 'POST',
       }),
     }),
+    sendNewCode: builder.mutation<void, void>({
+      query: () => ({
+        url: '/code/send',
+        method: 'POST',
+      }),
+    }),
+    approveEmail: builder.mutation<void, { code: string }>({
+      query: body => ({
+        url: '/user/approve-email',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } =
-  authController;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLogoutMutation,
+  useSendNewCodeMutation,
+  useApproveEmailMutation,
+} = authController;

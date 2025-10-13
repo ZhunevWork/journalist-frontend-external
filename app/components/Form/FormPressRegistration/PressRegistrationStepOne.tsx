@@ -170,6 +170,7 @@ export default function PressRegistrationStepOne(
       <Input
         value={values.department_code}
         label={stepOneLabels.department_code}
+        placeholder="000-000"
         {...register('department_code')}
         error={!!errors.department_code}
         maxLength={7}

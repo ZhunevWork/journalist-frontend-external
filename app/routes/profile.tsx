@@ -21,7 +21,7 @@ export default function Profile() {
 
   return (
     <div className="w-full">
-      <h1 className="font-(family-name:--font-halvar) text-4xl mb-8">
+      <h1 className="font-(family-name:--font-halvar) md:text-4xl text-2xl mb-8">
         Здравствуйте, {userData?.name}
       </h1>
 

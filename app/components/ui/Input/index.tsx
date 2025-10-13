@@ -17,6 +17,7 @@ export default function Input(props: InputProps) {
     value,
     onChange,
     onBlur,
+    placeholder,
     ...rest
   } = props;
   const [focused, setFocused] = useState(false);
@@ -79,6 +80,7 @@ export default function Input(props: InputProps) {
             : 'focus:border-black focus:ring-black hover:border-black bg-white',
           error ? 'border-red-500' : 'border-(--gray-light)',
         )}
+        placeholder={focused ? placeholder : ''}
         {...rest}
       />
 
