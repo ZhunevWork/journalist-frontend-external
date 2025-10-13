@@ -52,6 +52,7 @@ export interface IProfileData {
   profile_photo: FileType;
   documents: FileType[];
   mailing: boolean;
+  email_confirm: boolean;
 }
 
 export interface IRegisterArgs {

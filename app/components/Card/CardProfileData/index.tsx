@@ -1,9 +1,9 @@
 import { useUpdateProfileMutation } from '~/api/controllers/profile';
-import Button from '~/components/ui/Button';
 import Checkbox from '~/components/ui/Checkbox';
 import Input from '~/components/ui/Input';
 import { Radio } from '~/components/ui/Radio';
 import { useAppSelector } from '~/hooks/redux';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -38,6 +38,19 @@ export default function CardProfileData() {
 
   return (
     <div className="md:p-9 p-4 rounded-3xl border border-(--gray-light) grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-3">
+      <div
+        className={clsx(
+          'md:col-span-2 col-span-1 grid grid-cols-1 gap-4',
+          userData?.middle_name ? 'md:grid-cols-3' : 'grid-cols-2',
+        )}
+      >
+        <Input label="Фамилия" value={userData?.last_name} disabled />
+        <Input label="Имя" value={userData?.name} disabled />
+        {userData?.middle_name && (
+          <Input label="Отчество" value={userData?.middle_name} disabled />
+        )}
+      </div>
+
       <div className="flex flex-col gap-2.5">
         <span className="text-(--gray) text-sm">Тип ресурса</span>
 
@@ -87,8 +100,8 @@ export default function CardProfileData() {
             </span>
 
             <p>
-              {profileData?.passport_number}&nbsp;
-              {profileData?.passport_series}&nbsp; от&nbsp;
+              {profileData?.passport_series}&nbsp;
+              {profileData?.passport_number}&nbsp; от&nbsp;
               {dayjs(profileData?.issue_date).format('DD.MM.YYYY')} <br />{' '}
               Выдан&nbsp;{profileData?.who_issues},&nbsp;
               {profileData?.department_code}
@@ -104,7 +117,7 @@ export default function CardProfileData() {
               iconRight={
                 (profileData?.fan_id ?? '') !== fanId ? (
                   <button
-                    className="hover:opacity-80 h-full"
+                    className="hover:opacity-80 h-full hover:cursor-pointer"
                     onClick={handleChangeFanId}
                   >
                     <img src="./icons/check-large.svg" alt="check" />
@@ -124,7 +137,7 @@ export default function CardProfileData() {
         />
         {profileData?.mailing !== checked && (
           <button
-            className="hover:opacity-80 h-full w-[28px]"
+            className="hover:opacity-80 h-full w-[28px] hover:cursor-pointer"
             onClick={handleChangeSubscribe}
           >
             <img src="./icons/check-large.svg" alt="check" />
