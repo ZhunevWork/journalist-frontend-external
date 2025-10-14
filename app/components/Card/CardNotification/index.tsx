@@ -15,7 +15,7 @@ export default function CardNotification(props: CardAccreditationProps) {
 
       <span className="flex items-center gap-2">
         <img src="./icons/location.svg" alt="location" />
-        {props.data.model.location || props.data.model.event.location}
+        {props.data.model.location || props.data.model?.event?.location}
       </span>
     </CardWrapper>
   );

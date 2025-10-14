@@ -18,8 +18,11 @@ export default function AppLayout() {
   const location = useLocation();
   const { isMd } = useResponsive();
   const isAuthPage = location.pathname === RouterPaths.AUTH;
+  const isResetPage = location.pathname === RouterPaths.RESET;
 
   initializeEcho();
+
+  console.log(location.pathname);
 
   useEffect(() => {
     if (
@@ -27,14 +30,14 @@ export default function AppLayout() {
       !profileData?.is_approved ||
       profileData.deleted
     ) {
-      navigate(RouterPaths.AUTH);
+      if (!isResetPage) navigate(RouterPaths.AUTH);
     } else if (userToken && isAuthPage) {
       navigate(RouterPaths.HOME);
     }
   }, [userToken, isAuthPage, navigate]);
 
   // Если неавторизован и не на странице auth - не рендерим ничего
-  if (!userToken && !isAuthPage) {
+  if (!userToken && !isAuthPage && !isResetPage) {
     return null;
   }
 
@@ -42,7 +45,7 @@ export default function AppLayout() {
     <>
       <div className="flex">
         <Container classNames="flex gap-6 md:gap-20">
-          {!isAuthPage && isMd && <Menu />}
+          {!isAuthPage && !isResetPage && isMd && <Menu />}
           <div className="w-full">
             <Header />
             <main>
@@ -52,7 +55,7 @@ export default function AppLayout() {
         </Container>
       </div>
       <Footer />
-      <Container>{!isAuthPage && !isMd && <Menu />}</Container>
+      <Container>{!isAuthPage && !isResetPage && !isMd && <Menu />}</Container>
     </>
   );
 }

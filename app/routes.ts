@@ -10,6 +10,7 @@ export const enum RouterPaths {
   AUTH = '/auth',
   PROFILE = '/profile',
   ACCREDITATIONS = '/accreditations',
+  RESET = '/reset-password',
 }
 
 export default [
@@ -18,5 +19,6 @@ export default [
     route(RouterPaths.AUTH, 'routes/auth.tsx'),
     route(RouterPaths.PROFILE, './routes/profile.tsx'),
     route(RouterPaths.ACCREDITATIONS, 'routes/accreditations.tsx'),
+    route(RouterPaths.RESET, 'routes/resetPassword.tsx'),
   ]),
 ] satisfies RouteConfig;
