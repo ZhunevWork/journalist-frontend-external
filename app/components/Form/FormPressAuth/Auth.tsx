@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-export default function Auth() {
+export default function Auth({ setIsRestore }: { setIsRestore: () => void }) {
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
@@ -50,10 +50,10 @@ export default function Auth() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4 md:gap-8"
       noValidate
+      className="flex flex-col md:w-md"
     >
-      <h2 className="font-(--font-halvar) text-4xl">Вход</h2>
+      <h2 className="font-(--font-halvar) text-4xl mb-8">Вход</h2>
 
       <Input
         type="text"
@@ -61,6 +61,7 @@ export default function Auth() {
         {...register('email', { required: 'Это поле обязательно' })}
         error={!!errors.email?.message}
         autoComplete="username"
+        classNames="mb-4"
       />
 
       <Input
@@ -69,11 +70,16 @@ export default function Auth() {
         {...register('password', { required: 'Это поле обязательно' })}
         error={!!errors.password?.message}
         autoComplete="current-password"
+        classNames="mb-6"
       />
 
-      {errors.root && (
-        <div className="text-red-500 text-sm">{errors.root.message}</div>
-      )}
+      <button
+        type="button"
+        className="mb-8 cursor-pointer"
+        onClick={setIsRestore}
+      >
+        Забыли пароль?
+      </button>
 
       <Button type="submit" disabled={isLoading || !isValid}>
         {isLoading ? 'Входим...' : 'Продолжить'}

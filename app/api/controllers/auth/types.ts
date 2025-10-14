@@ -20,6 +20,7 @@ export interface IUserData {
   email: string;
   profile_id: number;
   roles: string[];
+  email_verified: boolean;
 }
 
 export enum SmitType {
@@ -52,7 +53,6 @@ export interface IProfileData {
   profile_photo: FileType;
   documents: FileType[];
   mailing: boolean;
-  email_confirm: boolean;
 }
 
 export interface IRegisterArgs {

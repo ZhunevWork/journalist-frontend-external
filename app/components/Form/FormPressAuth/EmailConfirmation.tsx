@@ -4,11 +4,13 @@ import {
 } from '~/api/controllers/auth';
 import Button from '~/components/ui/Button';
 import Input from '~/components/ui/Input';
-import { useAppSelector } from '~/hooks/redux';
+import { useAppDispatch, useAppSelector } from '~/hooks/redux';
+import { setUserData } from '~/store/authSlice';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function EmailConfirmation() {
+  const dispatch = useAppDispatch();
   const userData = useAppSelector(s => s.auth.userData);
 
   const [code, setCode] = useState<string>('');
@@ -19,7 +21,10 @@ export default function EmailConfirmation() {
   const handleApproveEmail = () => {
     approveEmail({ code })
       .unwrap()
-      .then(() => toast.success('Код подтвержден'))
+      .then(data => {
+        dispatch(setUserData(data.data));
+        toast.success('Код подтвержден');
+      })
       .catch(() => toast.error('Неверный код'));
   };
 

@@ -4,7 +4,9 @@ import type {
   ILoginResponse,
   IRegisterArgs,
   IRegisterResponse,
+  IUserData,
 } from '~/api/controllers/auth/types';
+import { getQueryFromObject } from '~/utils/getQueryFromObject';
 import dayjs from 'dayjs';
 
 export const authController = commonApi.injectEndpoints({
@@ -94,11 +96,32 @@ export const authController = commonApi.injectEndpoints({
         method: 'POST',
       }),
     }),
-    approveEmail: builder.mutation<void, { code: string }>({
+    approveEmail: builder.mutation<{ data: IUserData }, { code: string }>({
       query: body => ({
         url: '/user/approve-email',
         method: 'POST',
         body,
+      }),
+    }),
+    request: builder.mutation<{ message: string }, { email: string }>({
+      query: body => ({
+        url: '/forgot-password',
+        method: 'POST',
+        body,
+      }),
+    }),
+    reset: builder.mutation<
+      { message: string },
+      {
+        email: string;
+        password: string;
+        password_confirmation: string;
+        token: string;
+      }
+    >({
+      query: query => ({
+        url: `/reset-password${getQueryFromObject(query)}`,
+        method: 'POST',
       }),
     }),
   }),
@@ -106,8 +129,10 @@ export const authController = commonApi.injectEndpoints({
 
 export const {
   useLoginMutation,
-  useRegisterMutation,
+  useResetMutation,
   useLogoutMutation,
+  useRequestMutation,
+  useRegisterMutation,
   useSendNewCodeMutation,
   useApproveEmailMutation,
 } = authController;

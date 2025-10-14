@@ -19,6 +19,7 @@ function Menu({
   const { isMd } = useResponsive();
   const token = useAppSelector(s => s.auth.userToken);
   const avatar = useAppSelector(s => s.auth.profileData?.profile_photo.url);
+  const emailVerified = useAppSelector(s => s.auth.userData?.email_verified);
 
   return (
     <div className="py-4 md:py-6.5 flex items-center w-full">
@@ -42,7 +43,7 @@ function Menu({
 
       {/* Кнопки справа */}
       <div className="flex gap-3 md:gap-5 ml-auto">
-        {token && (
+        {token && emailVerified && (
           <>
             <button
               onClick={setIsDrawerOpen}
