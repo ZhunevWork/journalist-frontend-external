@@ -1,3 +1,4 @@
+import { useSetReadNotificationsMutation } from '~/api/controllers/notifications';
 import type { INotification } from '~/api/controllers/notifications/types';
 import CardWrapper from '~/components/Card/CardWrapper';
 import dayjs from 'dayjs';
@@ -5,9 +6,36 @@ import dayjs from 'dayjs';
 type CardAccreditationProps = INotification;
 
 export default function CardNotification(props: CardAccreditationProps) {
+  const { read_at, id } = props;
+
+  const [setReadNotification] = useSetReadNotificationsMutation();
+
+  const handleRead = async (id: string) => {
+    try {
+      await setReadNotification(id).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <CardWrapper>
-      <h4 className="text-lg mb-1 md:mb-2.5">{props.data.model.name}</h4>
+      <div className="  mb-1 md:mb-2.5 flex items-center gap-2.5">
+        {!read_at && (
+          <button
+            className={'bg-red rounded-full'}
+            onClick={() => handleRead(id)}
+          >
+            <img
+              src="./icons/status-notification.svg"
+              alt="status notification"
+            />
+          </button>
+        )}
+        <div>
+          <h4 className="text-lg">{props.data.model.name}</h4>
+        </div>
+      </div>
       <p className="mb-4 ">{props.data.message}</p>
       <p className="mb-4 ">
         {dayjs(props.data.model.date).format('MM.DD dd, hh:mm')}

@@ -1,3 +1,4 @@
+import { useGetNotificationsQuery } from '~/api/controllers/notifications';
 import ListNotifications from '~/components/List/ListNotifications';
 import Container from '~/components/ui/Container';
 import Drawer from '~/components/ui/Drawer';
@@ -18,7 +19,9 @@ function Menu({
 }) {
   const { isMd } = useResponsive();
   const token = useAppSelector(s => s.auth.userToken);
-  const avatar = useAppSelector(s => s.auth.profileData?.profile_photo.url);
+  const avatar = useAppSelector(
+    s => s.auth.profileData?.profile_photo?.url ?? '',
+  );
   const emailVerified = useAppSelector(s => s.auth.userData?.email_verified);
 
   return (
@@ -106,16 +109,48 @@ function Menu({
 }
 
 export default function Header() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const token = useAppSelector(s => s.auth.userToken);
+  const { data, isError } = useGetNotificationsQuery({ page: 1 });
+
+  const hasUnread = data?.data.some(el => el.read_at === null);
 
   return (
-    <header className="w-full bg-white">
+    <header className="w-full bg-white items-center flex">
       <Menu
         setIsDrawerOpen={() => setIsDrawerOpen(true)}
         setIsMenuOpen={() => setIsMenuOpen(true)}
         isMenuOpen={isMenuOpen}
       />
+
+      {token && (
+        <div className="flex gap-3 md:gap-5">
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            className=" relative h-10 w-10 md:h-[60px] md:w-[60px] rounded-full border border-(--gray-light) flex items-center justify-center cursor-pointer"
+          >
+            <img
+              src="./icons/bell.svg"
+              alt="bell"
+              className="w-5 h-5 md:w-6 md:h-6"
+            />
+            {hasUnread && (
+              <img
+                className="absolute right-2/6 top-2/8"
+                src="./icons/status-notification.svg"
+                alt="status notification"
+              />
+            )}
+          </button>
+
+          <Link to={RouterPaths.PROFILE}>
+            <div className="flex justify-center items-center h-12 w-12 md:h-[60px] md:w-[60px] rounded-full bg-(--bg-brand)">
+              <img src="./icons/user-logo.svg" alt="logo" />
+            </div>
+          </Link>
+        </div>
+      )}
 
       {/* Drawer для уведомлений и мобильного меню */}
       <Drawer
@@ -123,7 +158,7 @@ export default function Header() {
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
       >
-        <ListNotifications />
+        <ListNotifications data={data} isError={isError} />
       </Drawer>
 
       <Drawer
