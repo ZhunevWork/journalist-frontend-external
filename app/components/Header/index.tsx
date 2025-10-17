@@ -128,7 +128,7 @@ export default function Header() {
         <div className="flex gap-3 md:gap-5">
           <button
             onClick={() => setIsDrawerOpen(true)}
-            className=" relative h-10 w-10 md:h-[60px] md:w-[60px] rounded-full border border-(--gray-light) flex items-center justify-center cursor-pointer"
+            className=" relative h-12 w-12 md:h-[60px] md:w-[60px] rounded-full border border-(--gray-light) flex items-center justify-center cursor-pointer"
           >
             <img
               src="./icons/bell.svg"

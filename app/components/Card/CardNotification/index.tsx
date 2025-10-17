@@ -20,10 +20,10 @@ export default function CardNotification(props: CardAccreditationProps) {
 
   return (
     <CardWrapper>
-      <div className="  mb-1 md:mb-2.5 flex items-center gap-2.5">
+      <div className="  mb-1 md:mb-2.5 flex items-center">
         {!read_at && (
           <button
-            className={'bg-red rounded-full'}
+            className={'bg-red rounded-full p-2.5 cursor-pointer ml-[-10px]'}
             onClick={() => handleRead(id)}
           >
             <img
@@ -33,18 +33,29 @@ export default function CardNotification(props: CardAccreditationProps) {
           </button>
         )}
         <div>
-          <h4 className="text-lg">{props.data.model.name}</h4>
+          <h4 className="text-lg font-bold">{props.data.message}</h4>
+          <span></span>
         </div>
       </div>
-      <p className="mb-4 ">{props.data.message}</p>
-      <p className="mb-4 ">
-        {dayjs(props.data.model.date).format('MM.DD dd, hh:mm')}
-      </p>
+      <p className="mb-4 ">{props.data.model.event?.name}</p>
+      {props.data.model.event?.date && (
+        <p className="mb-4 ">
+          {dayjs(props.data.model.event?.date).format('MM.DD dd, hh:mm')}
+        </p>
+      )}
 
-      <span className="flex items-center gap-2">
-        <img src="./icons/location.svg" alt="location" />
-        {props.data.model.location || props.data.model?.event?.location}
-      </span>
+      {props.data.model.date && (
+        <p className="mb-4 ">
+          {dayjs(props.data.model.date).format('MM.DD dd, hh:mm')}
+        </p>
+      )}
+
+      {(props.data.model.location || props.data.model?.event?.location) && (
+        <span className="flex items-center gap-2">
+          <img src="./icons/location.svg" alt="location" />
+          {props.data.model.location || props.data.model?.event?.location}
+        </span>
+      )}
     </CardWrapper>
   );
 }
