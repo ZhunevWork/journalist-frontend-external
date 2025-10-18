@@ -109,7 +109,7 @@ function Menu({
 }
 
 export default function Header() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const token = useAppSelector(s => s.auth.userToken);
   const { data, isError } = useGetNotificationsQuery({ page: 1 });
