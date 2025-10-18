@@ -14,11 +14,20 @@ export const getAccreditationsByStatus = (
     const isPSApproved = accreditation.is_approved_by_ps;
     const isSSApproved = accreditation.is_approved_by_ss;
 
+    const isRejected = isPSApproved === false || isSSApproved === false;
+
+    const isBothApproved = isPSApproved === true && isSSApproved === true;
+
+    const isInProgress = !isRejected && !isBothApproved;
+
     if (status === 'in_progress') {
-      return !isPSApproved || !isSSApproved;
+      return isInProgress;
     }
     if (status === 'approved') {
-      return isPSApproved === true && isSSApproved === true;
+      return isBothApproved;
+    }
+    if (status === 'rejected') {
+      return isRejected;
     }
     return false;
   });
