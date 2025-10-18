@@ -81,6 +81,12 @@ export default function Auth({ setIsRestore }: { setIsRestore: () => void }) {
         Забыли пароль?
       </button>
 
+      {errors.root && (
+        <div className="text-red-500 text-sm mb-4 md:mb-8">
+          {errors.root.message}
+        </div>
+      )}
+
       <Button type="submit" disabled={isLoading || !isValid}>
         {isLoading ? 'Входим...' : 'Продолжить'}
       </Button>
