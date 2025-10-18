@@ -32,6 +32,7 @@ export interface INotification {
   id: string;
   data: INotificationData;
   read_at: string | null;
+  created_at: string
 }
 
 export interface GetNotificationsArgs {
