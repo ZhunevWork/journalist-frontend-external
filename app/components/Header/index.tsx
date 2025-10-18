@@ -24,6 +24,8 @@ function Menu({
   );
   const emailVerified = useAppSelector(s => s.auth.userData?.email_verified);
   const isAuthPage = location.pathname === RouterPaths.AUTH;
+  const { data, isError } = useGetNotificationsQuery({ page: 1 });
+  const hasUnread = data?.data.some(el => el.read_at === null);
 
   return (
     <div className="py-4 md:py-11 flex items-center w-full">
@@ -51,13 +53,20 @@ function Menu({
           <>
             <button
               onClick={setIsDrawerOpen}
-              className="h-12 w-12 md:h-[60px] md:w-[60px] rounded-full border border-(--gray-light) flex items-center justify-center cursor-pointer"
+              className="h-12 w-12 md:h-[60px] md:w-[60px] relative rounded-full border border-(--gray-light) flex items-center justify-center cursor-pointer"
             >
               <img
                 src="./icons/bell.svg"
                 alt="bell"
                 className="w-5 h-5 md:w-6 md:h-6"
               />
+              {hasUnread && (
+                <img
+                  className="absolute right-2/6 top-2/8"
+                  src="./icons/status-notification.svg"
+                  alt="status notification"
+                />
+              )}
             </button>
 
             <Link to={RouterPaths.PROFILE}>
@@ -115,8 +124,6 @@ export default function Header() {
   const token = useAppSelector(s => s.auth.userToken);
   const { data, isError } = useGetNotificationsQuery({ page: 1 });
 
-  const hasUnread = data?.data.some(el => el.read_at === null);
-
   return (
     <header className="w-full bg-white items-center flex">
       <Menu
@@ -124,34 +131,6 @@ export default function Header() {
         setIsMenuOpen={() => setIsMenuOpen(true)}
         isMenuOpen={isMenuOpen}
       />
-
-      {token && (
-        <div className="flex gap-3 md:gap-5">
-          <button
-            onClick={() => setIsDrawerOpen(true)}
-            className=" relative h-12 w-12 md:h-[60px] md:w-[60px] rounded-full border border-(--gray-light) flex items-center justify-center cursor-pointer"
-          >
-            <img
-              src="./icons/bell.svg"
-              alt="bell"
-              className="w-5 h-5 md:w-6 md:h-6"
-            />
-            {hasUnread && (
-              <img
-                className="absolute right-2/6 top-2/8"
-                src="./icons/status-notification.svg"
-                alt="status notification"
-              />
-            )}
-          </button>
-
-          <Link to={RouterPaths.PROFILE}>
-            <div className="flex justify-center items-center h-12 w-12 md:h-[60px] md:w-[60px] rounded-full bg-(--bg-brand)">
-              <img src="./icons/user-logo.svg" alt="logo" />
-            </div>
-          </Link>
-        </div>
-      )}
 
       {/* Drawer для уведомлений и мобильного меню */}
       <Drawer
