@@ -15,11 +15,6 @@ const socials = [
     link: '',
   },
   {
-    title: 'tt',
-    img: './icons/social/tt.svg',
-    link: '',
-  },
-  {
     title: 'ok',
     img: './icons/social/ok.svg',
     link: '',
