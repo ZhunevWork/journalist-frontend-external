@@ -23,14 +23,15 @@ function Menu({
     s => s.auth.profileData?.profile_photo?.url ?? '',
   );
   const emailVerified = useAppSelector(s => s.auth.userData?.email_verified);
+  const isAuthPage = location.pathname === RouterPaths.AUTH;
 
   return (
-    <div className="py-4 md:py-6.5 flex items-center w-full">
-      {!isMd && (
+    <div className="py-4 md:py-11 flex items-center w-full">
+      {isAuthPage && (
         <img
           src="./icons/logo.svg"
           alt="logo"
-          className="w-12 h-12 md:w-auto md:h-auto"
+          className="w-12 mr-20  h-12 md:w-auto md:h-auto"
         />
       )}
 
