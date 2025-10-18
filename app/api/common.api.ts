@@ -4,6 +4,7 @@ import { BASE_URL } from '~/config';
 import type { RootState } from '~/store';
 
 export const commonApi = createApi({
+  tagTypes: ['notifications'],
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     // credentials: 'include',
