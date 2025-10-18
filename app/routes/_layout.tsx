@@ -1,4 +1,4 @@
-import { initializeEcho } from '~/api/controllers/notifications/echo';
+import { initializeEcho, useUserNotifications } from '~/api/controllers/notifications/echo';
 import Footer from '~/components/Footer';
 import Header from '~/components/Header';
 import Menu from '~/components/Menu';
@@ -13,16 +13,23 @@ import { Outlet, useLocation, useNavigate } from 'react-router';
 export default function AppLayout() {
   const userToken = useSelector((state: any) => state.auth.userToken);
   const profileData = useAppSelector(s => s.auth.profileData);
+  const userData = useSelector((state: any) => state.auth.userData);
 
   const navigate = useNavigate();
   const location = useLocation();
   const { isMd } = useResponsive();
   const isAuthPage = location.pathname === RouterPaths.AUTH;
   const isResetPage = location.pathname === RouterPaths.RESET;
+  const userId = userData?.id;
 
-  initializeEcho();
 
   console.log(location.pathname);
+
+  useEffect(() => {
+    if (userToken) {
+      initializeEcho();
+    }
+  }, [userToken]);
 
   useEffect(() => {
     if (
@@ -35,6 +42,8 @@ export default function AppLayout() {
       navigate(RouterPaths.HOME);
     }
   }, [userToken, isAuthPage, navigate]);
+
+  useUserNotifications(userId);
 
   // Если неавторизован и не на странице auth - не рендерим ничего
   if (!userToken && !isAuthPage && !isResetPage) {
