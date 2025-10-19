@@ -20,7 +20,7 @@ export default function CardNotification(props: CardAccreditationProps) {
   };
 
   return (
-    <CardWrapper>
+    <CardWrapper read_at={read_at} isNotification>
       <div className="  mb-1 md:mb-2.5 flex items-center">
         {!read_at && (
           <button

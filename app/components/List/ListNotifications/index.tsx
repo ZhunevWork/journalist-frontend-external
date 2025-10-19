@@ -1,7 +1,12 @@
-import { useGetNotificationsQuery } from '~/api/controllers/notifications';
 import CardNotification from '~/components/Card/CardNotification';
+import type { GetNotificationsArgs } from '~/api/controllers/notifications/types';
 
-export default function ListNotifications(props) {
+type Props = {
+  data?: GetNotificationsArgs,
+  isError: boolean;
+}
+
+export default function ListNotifications(props: Props) {
   const { data, isError } = props
 
   if (isError || !data) return null;
