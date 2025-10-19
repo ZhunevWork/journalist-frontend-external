@@ -7,14 +7,16 @@ type PropsType = {
 const ModalBlockedJournalist = (props: PropsType) => {
   const { onChange } = props;
   return (
-    <div className="w-full max-w-[640px] p-4 md:p-12 rounded-2xl md:rounded-3xl border border-(--gray-light) shadow-lg shadow-gray-200 flex flex-col gap-4 md:gap-8">
-      <h1 className="font-(--font-halvar) text-4xl ">Аккаунт заблокирован</h1>
-      <div className="md:py-7 md:px-8 border border-(--gray-light) rounded-xl">
-        <p className="text-lg leading-6 font-bold mb-2.5">
+    <>
+      <h1 className="font-(--font-halvar) md:text-4xl text-[22px] font-bold">
+        Аккаунт заблокирован
+      </h1>
+      <div className="md:py-7 md:px-8 border py-[22px] px-6 border-(--gray-light) shadow-[0_5px_12px_0_rgba(7,56,48,0.15)] rounded-xl">
+        <p className="md:text-lg text-base leading-6 font-bold mb-2.5">
           Ваш аккаунт заблокирован
         </p>
-        <p>
-          Вы можете утонить причину блокировки у справочной службы:
+        <p className="md:text-lg text-xs">
+          Вы можете утонить причину блокировки у справочной службы:{' '}
           <a
             className="text-[#0B7159] underline"
             href="mailto:support@domain.ru"
@@ -26,7 +28,7 @@ const ModalBlockedJournalist = (props: PropsType) => {
       <Button onClick={() => onChange(false)} type="button">
         Выйти
       </Button>
-    </div>
+    </>
   );
 };
 

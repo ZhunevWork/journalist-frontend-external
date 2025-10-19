@@ -19,7 +19,7 @@ export default function FormPressAuth({ setIsAuth }: FormPressAuthProps) {
   const [isRestore, setIsRestore] = useState<boolean>(false);
 
   return (
-    <div className="md:p-12 rounded-2xl md:rounded-3xl md:border border-(--gray-light) md:shadow-lg md:shadow-gray-200 flex flex-col gap-4 md:gap-8 relative">
+    <div className="md:p-12 md:max-w-[640px] w-full rounded-2xl md:rounded-3xl md:border border-(--gray-light) md:shadow-lg md:shadow-gray-200 flex flex-col gap-4 md:gap-8 relative">
       {(user?.email_verified === false || isRestore) && (
         <button
           className="w-fit hover:bg-(--gray-light) rounded-full md:absolute -left-15 top-5"
