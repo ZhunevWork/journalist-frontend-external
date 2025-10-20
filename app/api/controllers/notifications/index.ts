@@ -23,5 +23,8 @@ export const notificationsController = commonApi.injectEndpoints({
   }),
 });
 
-export const { useGetNotificationsQuery, useSetReadNotificationsMutation } =
-  notificationsController;
+export const {
+  useGetNotificationsQuery,
+  useSetReadNotificationsMutation,
+  useLazyGetNotificationsQuery,
+} = notificationsController;

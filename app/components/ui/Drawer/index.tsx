@@ -12,6 +12,7 @@ interface DrawerProps {
   width?: number | string;
   position?: 'right' | 'left' | 'bottom' | 'top';
   showCloseButton?: boolean;
+  id?: string;
 }
 
 export default function Drawer({
@@ -23,6 +24,7 @@ export default function Drawer({
   width = 556,
   position = 'right',
   showCloseButton = true,
+  id,
 }: DrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -147,7 +149,9 @@ export default function Drawer({
               )}
             </div>
           )}
-          <div className="flex-1 overflow-y-auto">{children}</div>
+          <div id={id} className="flex-1 overflow-y-auto ">
+            {children}
+          </div>
         </div>
       </div>
     </>

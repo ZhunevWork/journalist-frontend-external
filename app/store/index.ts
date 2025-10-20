@@ -1,9 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { commonApi } from '~/api/common.api';
 import authSlice from '~/store/authSlice';
+import notificationsSlice from '~/store/notificationSlice';
 
 const rootReducer = combineReducers({
   auth: authSlice,
+  notifications: notificationsSlice,
   [commonApi.reducerPath]: commonApi.reducer,
 });
 
