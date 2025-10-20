@@ -41,7 +41,7 @@ export default function Header() {
 
         {/* Кнопки справа */}
         <div className="flex gap-3 md:gap-5 ml-auto">
-          {token && emailVerified && (
+          {token && emailVerified !== false && (
             <>
               <button
                 onClick={() => setIsDrawerOpen(true)}
