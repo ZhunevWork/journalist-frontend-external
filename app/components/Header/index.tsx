@@ -1,4 +1,3 @@
-import { useGetNotificationsQuery } from '~/api/controllers/notifications';
 import ListNotifications from '~/components/List/ListNotifications';
 import Drawer from '~/components/ui/Drawer';
 import { useAppSelector } from '~/hooks/redux';
@@ -9,11 +8,12 @@ import { Link } from 'react-router';
 export default function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data, isError } = useGetNotificationsQuery({ page: 1 });
   const isAuthPage = location.pathname === RouterPaths.AUTH;
   const token = useAppSelector(s => s.auth.userToken);
   const emailVerified = useAppSelector(s => s.auth.userData?.email_verified);
-  const hasUnread = data?.data.some(el => el.read_at === null);
+  const notifications = useAppSelector(s => s.notifications.notifications);
+  const hasUnread = notifications.some(el => el.read_at === null);
+
   const avatar = useAppSelector(
     s => s.auth.profileData?.profile_photo?.url ?? '',
   );
@@ -113,8 +113,9 @@ export default function Header() {
         title="Уведомления"
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
+        id="notifications-drawer"
       >
-        <ListNotifications data={data} isError={isError} />
+        <ListNotifications />
       </Drawer>
 
       <Drawer

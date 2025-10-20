@@ -1,6 +1,8 @@
 import { configureEcho, echo, echoIsConfigured } from '@laravel/echo-react';
-import { useGetNotificationsQuery } from '~/api/controllers/notifications';
+import { useGetNotificationsQuery, useLazyGetNotificationsQuery } from '~/api/controllers/notifications';
 import { useEffect } from 'react';
+import { useAppDispatch } from '~/hooks/redux';
+import { setNotifications } from '~/store/notificationSlice';
 
 export function initializeEcho() {
   const token = localStorage.getItem('userToken');
@@ -31,7 +33,8 @@ export function initializeEcho() {
 }
 
 export function useUserNotifications(userId?: number) {
-  const { refetch } = useGetNotificationsQuery({ page: 1 });
+  const dispatch = useAppDispatch();
+  const [fetchNotifications] = useLazyGetNotificationsQuery();
 
   useEffect(() => {
     if (!userId || !echoIsConfigured()) {
@@ -42,14 +45,18 @@ export function useUserNotifications(userId?: number) {
     const channel = echoInstance.private(`App.Models.User.${userId}`);
     channel.listen(
       '.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated',
-      (data: any) => {
-        console.log('New notification received:', data);
-        refetch();
-      },
+      async (data: any) => {
+        try {
+          const response = await fetchNotifications({ page: 1 }).unwrap();
+          dispatch(setNotifications(response.data));
+        } catch (err) {
+          console.error('Ошибка при обновлении уведомлений:', err);
+        }
+      }
     );
 
     return () => {
       echoInstance.leaveChannel(`private-App.Models.User.${userId}`);
     };
-  }, [userId, refetch]);
+  }, [userId, ]);
 }
