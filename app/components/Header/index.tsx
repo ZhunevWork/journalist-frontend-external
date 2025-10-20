@@ -11,6 +11,7 @@ export default function Header() {
   const isAuthPage = location.pathname === RouterPaths.AUTH;
   const token = useAppSelector(s => s.auth.userToken);
   const emailVerified = useAppSelector(s => s.auth.userData?.email_verified);
+  const isApproved = useAppSelector(s => s.auth.userData?.is_approved);
   const notifications = useAppSelector(s => s.notifications.notifications);
   const hasUnread = notifications.some(el => el.read_at === null);
 
@@ -41,7 +42,7 @@ export default function Header() {
 
         {/* Кнопки справа */}
         <div className="flex gap-3 md:gap-5 ml-auto">
-          {token && emailVerified !== false && (
+          {token && emailVerified !== false && isApproved == true && (
             <>
               <button
                 onClick={() => setIsDrawerOpen(true)}

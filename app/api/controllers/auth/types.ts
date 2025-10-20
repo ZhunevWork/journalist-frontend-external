@@ -21,6 +21,7 @@ export interface IUserData {
   profile_id: number;
   roles: string[];
   email_verified: boolean;
+  is_approved: boolean
 }
 
 export enum SmitType {
