@@ -22,9 +22,6 @@ export default function AppLayout() {
   const isResetPage = location.pathname === RouterPaths.RESET;
   const userId = userData?.id;
 
-
-  console.log(location.pathname);
-
   useEffect(() => {
     if (userToken) {
       initializeEcho();

@@ -5,8 +5,6 @@ import { Link } from 'react-router';
 export default function HomePageList() {
   const { data: accreditations } = useGetAccreditationsQuery();
 
-  console.log(accreditations);
-
   if (!accreditations) {
     return null;
   }

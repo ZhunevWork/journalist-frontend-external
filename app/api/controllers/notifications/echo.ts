@@ -1,5 +1,5 @@
 import { configureEcho, echo, echoIsConfigured } from '@laravel/echo-react';
-import { useGetNotificationsQuery, useLazyGetNotificationsQuery } from '~/api/controllers/notifications';
+import {  useLazyGetNotificationsQuery } from '~/api/controllers/notifications';
 import { useEffect } from 'react';
 import { useAppDispatch } from '~/hooks/redux';
 import { setNotifications } from '~/store/notificationSlice';
