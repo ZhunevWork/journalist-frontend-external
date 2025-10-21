@@ -14,7 +14,7 @@ import { useAppSelector } from '~/hooks/redux';
 import { useResponsive } from '~/hooks/useResponsive';
 import clsx from 'clsx';
 import type { Dayjs } from 'dayjs';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -26,7 +26,7 @@ interface FormAccreditationAppProps {
 
 export default function FormAccreditationApp(props: FormAccreditationAppProps) {
   const { events, onClose, date } = props;
-
+  const [isFanIdRequerd, setIsFanIdRequerd] = useState<boolean>(false);
   const userData = useAppSelector(s => s.auth.userData);
   const profileData = useAppSelector(s => s.auth.profileData);
 
@@ -64,11 +64,23 @@ export default function FormAccreditationApp(props: FormAccreditationAppProps) {
   }, []);
 
   const onSubmit = (data: FormAccreditationAppValues) => {
-    createAccreditation(data)
+    const res = createAccreditation(data)
       .unwrap()
       .then(() => {
         toast.success('Заявка успешно отправлена');
         onClose();
+      })
+      .catch((error: any) => {
+        if (error?.data?.messages?.event_id?.[0]) {
+          toast(error?.data?.messages?.event_id?.[0]);
+        }
+        if (
+          error?.status === 400 &&
+          error?.data?.messages?.event_id?.[0] ===
+            'На данное мероприятие необходим FanId'
+        ) {
+          setIsFanIdRequerd(true);
+        }
       });
   };
 
@@ -133,8 +145,11 @@ export default function FormAccreditationApp(props: FormAccreditationAppProps) {
           </a>
         </label>
 
-        <Button type="submit" disabled={!isValid || isLoading}>
-          Подать заявку
+        <Button
+          type="submit"
+          disabled={!isValid || isLoading || isFanIdRequerd}
+        >
+          {isFanIdRequerd ? 'Необходима карта болельщика' : 'Подать заявку'}
         </Button>
       </div>
     </form>
