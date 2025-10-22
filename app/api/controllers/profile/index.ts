@@ -19,7 +19,23 @@ export const profilesController = commonApi.injectEndpoints({
         }),
       }),
     }),
+    subscribeProfile: builder.mutation<void, number>({
+      query: id => ({
+        url: `${CONTROLLER_URL}/${id}/subscribe`,
+        method: 'POST',
+      }),
+    }),
+    unsubscribeProfile: builder.mutation<void, number>({
+      query: id => ({
+        url: `${CONTROLLER_URL}/${id}/unsubscribe`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
-export const { useUpdateProfileMutation } = profilesController;
+export const {
+  useUpdateProfileMutation,
+  useSubscribeProfileMutation,
+  useUnsubscribeProfileMutation,
+} = profilesController;

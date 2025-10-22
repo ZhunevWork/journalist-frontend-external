@@ -1,39 +1,64 @@
-import { useUpdateProfileMutation } from '~/api/controllers/profile';
+import {
+  useSubscribeProfileMutation,
+  useUnsubscribeProfileMutation,
+  useUpdateProfileMutation,
+} from '~/api/controllers/profile';
 import Checkbox from '~/components/ui/Checkbox';
 import Input from '~/components/ui/Input';
 import { Radio } from '~/components/ui/Radio';
-import { useAppSelector } from '~/hooks/redux';
+import { useAppDispatch, useAppSelector } from '~/hooks/redux';
+import { setProfileData } from '~/store/authSlice';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function CardProfileData() {
   const profileData = useAppSelector(state => state.auth.profileData);
   const userData = useAppSelector(state => state.auth.userData);
+  const dispatch = useAppDispatch();
 
   const [checked, setChecked] = useState(profileData?.mailing);
   const [fanId, setFanId] = useState(profileData?.fan_id ?? '');
 
   const [updateProfile] = useUpdateProfileMutation();
+  const [subscribe] = useSubscribeProfileMutation();
+  const [unsubscribe] = useUnsubscribeProfileMutation();
 
   const handleChangeFanId = () => {
     updateProfile({ id: profileData?.id as number, body: { fan_id: fanId } })
       .unwrap()
-      .then(() => toast.success('Карта болельшика измененеа'))
-      .catch(() => toast.error('Не удалось обновить карту болельшика'));
+      .then(() => toast.success('Карта болельщика изменена'))
+      .catch(() => toast.error('Не удалось обновить карту болельщика'));
   };
 
+  useEffect(() => {
+    setChecked(profileData?.mailing ?? false);
+  }, [profileData]);
+
   const handleChangeSubscribe = () => {
-    updateProfile({
-      id: profileData?.id as number,
-      body: { mailing: checked },
-    })
+    if (!profileData?.id) return;
+
+    const isSubscribed = profileData.mailing;
+    const action = isSubscribed ? unsubscribe : subscribe;
+    const message = isSubscribed ? 'Вы отписались' : 'Вы подписались';
+
+    action(profileData.id)
       .unwrap()
-      .then(() => toast.success(checked ? 'Вы подписались' : 'Вы отписались'))
-      .catch(() =>
-        toast.error(`Не удалось ${checked ? 'подписаться' : 'отписаться'}`),
-      );
+      .then(() => {
+        toast.success(message);
+
+        const updatedProfile = {
+          ...profileData,
+          mailing: !isSubscribed,
+        };
+        dispatch(setProfileData(updatedProfile));
+
+        localStorage.setItem('profileData', JSON.stringify(updatedProfile));
+
+        setChecked(!isSubscribed);
+      })
+      .catch(() => toast.error(`Не удалось ${message.toLowerCase()}`));
   };
 
   return (
@@ -132,17 +157,18 @@ export default function CardProfileData() {
       <div className="px-2.5 py-4 border rounded-xl border-(--gray-light) w-[310px] flex items-center justify-between">
         <Checkbox
           checked={checked}
-          onChange={() => setChecked(!checked)}
+          onChange={handleChangeSubscribe}
           label="Рассылка"
         />
-        {profileData?.mailing !== checked && (
-          <button
-            className="hover:opacity-80 h-full w-[28px] hover:cursor-pointer"
-            onClick={handleChangeSubscribe}
-          >
-            <img src="./icons/check-large.svg" alt="check" />
-          </button>
-        )}
+        <button
+          className="hover:opacity-80 h-full w-[28px] hover:cursor-pointer"
+          onClick={handleChangeSubscribe}
+        >
+          {checked && <img src="./icons/check-large.svg" alt="check" />}
+          {!checked && (
+            <img src="./icons/check-large-inactive.svg" alt="check" />
+          )}
+        </button>
       </div>
     </div>
   );
