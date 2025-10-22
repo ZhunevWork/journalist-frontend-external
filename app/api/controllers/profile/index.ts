@@ -13,9 +13,8 @@ export const profilesController = commonApi.injectEndpoints({
       query: ({ id, body }) => ({
         url: `${CONTROLLER_URL}/${id}`,
         method: 'POST',
-        body: getFormDataFromObject<UpdateProfileArgs & { _method: 'put' }>({
+        body: getFormDataFromObject<UpdateProfileArgs>({
           ...body,
-          _method: 'put',
         }),
       }),
     }),
