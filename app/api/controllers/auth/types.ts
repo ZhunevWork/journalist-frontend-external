@@ -3,6 +3,7 @@ import type { FileType } from '~/api/controllers/types';
 export interface ILoginArgs {
   email: string;
   password: string;
+  scope: string;
 }
 
 export interface ILoginResponse {
@@ -21,7 +22,7 @@ export interface IUserData {
   profile_id: number;
   roles: string[];
   email_verified: boolean;
-  is_approved: boolean
+  is_approved: boolean;
 }
 
 export enum SmitType {

@@ -15,7 +15,7 @@ export const authController = commonApi.injectEndpoints({
       query: body => ({
         url: '/login',
         method: 'POST',
-        body,
+        body: { ...body, scope: 'journalist' },
       }),
       transformResponse: (res: any) => res.data,
     }),
